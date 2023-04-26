@@ -24,7 +24,11 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentFirstBinding.inflate(inflater, container, false).apply {
+            composeView.setContent {
+                
+            }
+        }
         return binding.root
 
     }
@@ -32,9 +36,9 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+//        binding.buttonFirst.setOnClickListener {
+//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//        }
     }
 
     override fun onDestroyView() {
