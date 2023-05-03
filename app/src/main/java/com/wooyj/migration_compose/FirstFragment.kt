@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.wooyj.migration_compose.databinding.FragmentFirstBinding
-import com.wooyj.migration_compose.ui.screen.HomeScreen
+import com.wooyj.migration_compose.ui.screen.home.HomeScreen
 import com.wooyj.migration_compose.ui.theme.GlowpickTheme
 
 
