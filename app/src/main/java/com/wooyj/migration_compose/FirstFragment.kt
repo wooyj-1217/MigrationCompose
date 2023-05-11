@@ -10,8 +10,10 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.wooyj.migration_compose.databinding.FragmentFirstBinding
 import com.wooyj.migration_compose.ui.screen.home.HomeScreen
 import com.wooyj.migration_compose.ui.theme.GlowpickTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null

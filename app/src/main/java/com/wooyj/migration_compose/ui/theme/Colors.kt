@@ -22,7 +22,7 @@ val highLightGlowViolet02 = "#E1DBFF".color
 
 //Text Colors-Light
 val primaryLight = "#333333".color
-val secondaryLight = "#444444".color
+val secondaryLight = "#99444444".color
 val tertiaryLight = "#66444444".color
 val quaternaryLight = "#33444444".color
 
@@ -55,98 +55,5 @@ val collector = "#F98383".color
 val explorer = "#F1B1B0".color
 val beginner = "#CABABB".color
 
-
 val String.color
     get() = Color(android.graphics.Color.parseColor(this))
-
-//@Immutable
-//data class GlowpickColors(
-//    val glowRed : Color,
-//    val glowViolet : Color,
-//    val glowYellow : Color,
-//    val glowBlue : Color,
-//    val glowGreen : Color,
-//    val starRed : Color,
-//    val disable : Color,
-//
-//    val highLightGlowRed : Color,
-//    val highLightGlowViolet : Color,
-//    val highLightGlowViolet02 : Color,
-//
-//    val primaryLight : Color,
-//    val secondaryLight : Color,
-//    val tertiaryLight : Color,
-//    val quaternaryLight : Color,
-//
-//    val primaryDark : Color,
-//    val secondaryDark : Color,
-//    val tertiaryDark : Color,
-//    val quaternaryDark : Color,
-//
-//    val greyLight01 : Color,
-//    val greyLight02 : Color,
-//    val greyLight03 : Color,
-//    val greyLight04 : Color,
-//    val greyLight05 : Color,
-//    val greyLight06 : Color,
-//
-//    val greyDark01 : Color,
-//    val greyDark02 : Color,
-//    val greyDark03 : Color,
-//    val greyDark04 : Color,
-//    val greyDark05 : Color,
-//    val greyDark06 : Color,
-//
-//    val master : Color,
-//    val expert : Color,
-//    val collector : Color,
-//    val explorer : Color,
-//    val beginner : Color,
-//
-//)
-//
-//val LocalGlowpickColors = staticCompositionLocalOf {
-//    GlowpickColors(
-//        glowRed = Color.Unspecified,
-//        glowViolet = Color.Unspecified,
-//        glowYellow = Color.Unspecified,
-//        glowBlue = Color.Unspecified,
-//        glowGreen = Color.Unspecified,
-//        starRed = Color.Unspecified,
-//        disable = Color.Unspecified,
-//
-//        highLightGlowRed = Color.Unspecified,
-//        highLightGlowViolet = Color.Unspecified,
-//        highLightGlowViolet02 = Color.Unspecified,
-//
-//        primaryLight = Color.Unspecified,
-//        secondaryLight = Color.Unspecified,
-//        tertiaryLight = Color.Unspecified,
-//        quaternaryLight = Color.Unspecified,
-//
-//        primaryDark = Color.Unspecified,
-//        secondaryDark = Color.Unspecified,
-//        tertiaryDark = Color.Unspecified,
-//        quaternaryDark = Color.Unspecified,
-//
-//        greyLight01 = Color.Unspecified,
-//        greyLight02 = Color.Unspecified,
-//        greyLight03 = Color.Unspecified,
-//        greyLight04 = Color.Unspecified,
-//        greyLight05 = Color.Unspecified,
-//        greyLight06 = Color.Unspecified,
-//
-//        greyDark01 = Color.Unspecified,
-//        greyDark02 = Color.Unspecified,
-//        greyDark03 = Color.Unspecified,
-//        greyDark04 = Color.Unspecified,
-//        greyDark05 = Color.Unspecified,
-//        greyDark06 = Color.Unspecified,
-//
-//        master = Color.Unspecified,
-//        expert = Color.Unspecified,
-//        collector = Color.Unspecified,
-//        explorer = Color.Unspecified,
-//        beginner = Color.Unspecified,
-//    )
-//}

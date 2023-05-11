@@ -87,36 +87,47 @@ fun TextStyle.multiLine(): TextStyle = this.copy(
         GlowpickTextType.LARGE_TITLE.fontSize -> {
             GlowpickTextType.LARGE_TITLE.multiLineHeight
         }
+
         GlowpickTextType.TITLE_1.fontSize -> {
             GlowpickTextType.TITLE_1.multiLineHeight
         }
+
         GlowpickTextType.TITLE_2.fontSize -> {
             GlowpickTextType.TITLE_2.multiLineHeight
         }
+
         GlowpickTextType.TITLE_3.fontSize -> {
             GlowpickTextType.TITLE_3.multiLineHeight
         }
+
         GlowpickTextType.HEADING_1.fontSize -> {
             GlowpickTextType.HEADING_1.multiLineHeight
         }
+
         GlowpickTextType.HEADING_2.fontSize -> {
             GlowpickTextType.HEADING_2.multiLineHeight
         }
+
         GlowpickTextType.BODY_1.fontSize -> {
             GlowpickTextType.BODY_1.multiLineHeight
         }
+
         GlowpickTextType.BODY_2.fontSize -> {
             GlowpickTextType.BODY_2.multiLineHeight
         }
+
         GlowpickTextType.FOOTNOTE.fontSize -> {
             GlowpickTextType.FOOTNOTE.multiLineHeight
         }
+
         GlowpickTextType.CAPTION_1.fontSize -> {
             GlowpickTextType.CAPTION_1.multiLineHeight
         }
+
         GlowpickTextType.CAPTION_2.fontSize -> {
             GlowpickTextType.CAPTION_2.multiLineHeight
         }
+
         else -> {
             TextStyle.Default.lineHeight
         }
@@ -134,7 +145,7 @@ fun buildTextStyle(type: GlowpickTextType): TextStyle =
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
             trim = LineHeightStyle.Trim.None
-        )
+        ), color = primaryLight
     )
 
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "914682212020",
+    "project_id": "migrationcompose",
+    "storage_bucket": "migrationcompose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914682212020:android:59a881729f8dab0e5df1e1",
+        "android_client_info": {
+          "package_name": "com.wooyj.migration_compose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914682212020-fjd5l2b6ru833ilqmfdqff6ng1o1fkd5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJwK2d9VmMRH4mc1FKaOiaVE_A4CzlDhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914682212020-fjd5l2b6ru833ilqmfdqff6ng1o1fkd5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
