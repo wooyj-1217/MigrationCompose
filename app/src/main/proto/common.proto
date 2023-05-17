@@ -1,0 +1,1389 @@
+syntax = "proto3";
+package common;
+
+import "google/protobuf/wrappers.proto";
+
+message Brand {
+  int32 idBrand = 1;
+  string created_at = 2;
+  string updated_at = 3;
+  string brandTitle = 4;
+  string name = 5;
+  string sub_name = 6;
+  string brandTitleInitial = 7;
+  string promotionText = 8;
+  int32 sortKey = 9;
+  bool isDisplay = 10;
+  bool isRecommend = 11;
+  string brandUrl = 12;
+  string brandFacebook = 13;
+  string twitter = 14;
+  string kakaotalk = 15;
+  string youTube = 16;
+  string tel = 17;
+  string start_date = 18;
+  string end_date = 19;
+  int32 brandImg = 20;
+  int32 brandinfo_idx = 21;
+  string create_date = 22;
+  string modified_date = 23;
+  string fileOrgName = 24;
+  string fileSaveName = 25;
+  string fileDir = 26;
+  int32 fileSize = 27;
+  string fileType = 28;
+  int32 insertIdRegister = 29;
+  int32 updateIdRegister = 30;
+  string country = 31;
+  string short_wording = 32;
+
+  string image_url = 101;
+  google.protobuf.BoolValue is_favorite = 102;//관심 브랜드 플래그 값
+  google.protobuf.BoolValue search_location = 103; //name, subName 중 어느 컬럼을 사용하는지 판단하기 위한 값
+  string promotion_image_url = 104;
+
+  repeated Product product_list = 201;
+}
+
+message Product {
+  int32 idProduct = 1;
+  int32 idBrand = 2;
+  string productTitle = 3;
+  string volume = 4;
+  int32 price = 5;
+  string productText = 6;
+  string colorType = 7;
+  string keyWord = 8;
+  int32 readCount = 9;
+  float productScore = 10;
+  float ratingAvg = 11;
+  int32 rationCount = 12;
+  bool isDisplay = 13;
+  bool isNaverApi = 14;
+  bool isNaverShopApi = 15;
+  bool isProductFeelApi = 16;
+  string rankingInfo = 17;
+  int32 productImg = 18;
+  int32 product_idx = 19;
+  string create_date = 20;
+  string modified_date = 21;
+  string fileOrgName = 22;
+  string fileSaveName = 23;
+  string fileDir = 24;
+  int32 fileSize = 25;
+  string fileType = 26;
+  int32 nrationCount = 27;
+  int32 nproductScore = 28;
+  bool isDiscontinue = 29;
+  string release_date = 30;
+  string factorsInsertedDate = 31;
+  string factorsModifiedDate = 32;
+  int32 factorsModifiedAdminId = 33;
+  bool factorsDisplay = 34;
+  string factorsDisplayStartDate = 35;
+  int32 rating1 = 36;
+  int32 rating2 = 37;
+  int32 rating3 = 38;
+  int32 rating4 = 39;
+  int32 rating5 = 40;
+  int32 insertIdRegister = 41;
+  int32 updateIdRegister = 42;
+  int32 factorsIdRegister = 43;
+  int32 primarySecondCategory = 44;
+  int32 primaryThirdCategory = 45;
+  bool is_recommend = 46;//[비즈니스 로직] 이달의 추천 제품(monthlyProduct 테이블의 값을 보고 판단하나 비즈니스 로직상 필요해서 포함시킴)
+  int32 ads_id = 47;//광고 키값 (monthlyProduct 테이블에 있는 값인데 필요해서 포함시킴)
+  int32 month_rank = 48;//[비즈니스 로직] 해당월의 제품 랭킹
+
+  google.protobuf.Int64Value product_rank = 49; //주간뷰티랭킹에서 쓰이는 랭킹순위
+  google.protobuf.Int64Value rank_change = 50;  //주간뷰티랭킹에서 쓰이는 랭킹순위 변동 내역
+  google.protobuf.StringValue rank_change_type = 51; //주간뷰티랭킹에서 쓰이는 랭킹순위 변동 내역 new [new,show,hide]
+  google.protobuf.Int64Value review_count = 52; //상품 리뷰카운트
+  google.protobuf.BoolValue is_favorite = 53;//위시리스트 체크 유무
+  repeated google.protobuf.StringValue keyword_list = 54;//제품 상세 -> 키워드 리스트
+
+  int32 recommend_id = 55;
+
+  string image_url = 101;
+
+  bool is_evaluation = 102; //평가단 당첨 유무
+
+  Brand brand = 201;
+  SecondCategoryV2 second_category_v2 = 202;
+  CategoryGroup category_group = 203; //1,2,3차 카테고리 정보
+  repeated BrandType store_list = 204;
+
+  MonthlyProduct monthly_product = 206;
+  EventAdInfo event_ad_info = 207; //이벤트 광고 정보
+
+
+}
+
+message CategoryGroup {
+  int64 idFirstCategory = 1;
+  string firstCategoryText = 2;
+  int64 idSecondCategory = 3;
+  string secondCategoryText = 4;
+  int64 idThirdCategory = 5;
+  string thirdCategoryText = 6;
+
+  //rank 구분 (오늘의 테마 영역에서 사용 하려고 추가함)
+  int64 second_category_rank = 7;
+  int64 third_category_rank = 8;
+
+  string first_category_image_url = 9;//qna 관심분야 리스트에서 사용될 response 값
+  google.protobuf.BoolValue firstCategoryIsDisplay = 10;
+  google.protobuf.BoolValue secondCategoryIsDisplay = 11;
+}
+
+message Review {
+  int32 idreviewcomment = 1;
+  int32 idRegister = 2;
+  int32 idProduct = 3;
+  string reviewText = 4;
+  int32 rating = 5;
+  int32 likeCount = 6;
+  bool isDisplay = 7;
+  bool isEvaluation = 8;
+  string ipAddress = 9;
+  string create_date = 10;
+  string tag = 11;
+  int32 report_count = 12;
+  string state = 13;
+  bool when_seceded = 14;
+  string modified_date = 15;
+
+  bool is_like = 16;
+  google.protobuf.StringValue title = 17;
+  bool is_follow = 18;
+  google.protobuf.StringValue blind_cause = 19; //블라인드 사유
+
+  Product product = 201;
+  Register editor = 202;
+  SearchReviewTag search_review_tag = 203; //리뷰 검색 관련
+
+  StampRegisterInfo stamp_register_info = 204;
+
+  message StampRegisterInfo {
+    int64 id = 1;
+    int64 stamp_id = 2;
+    int64 register_id = 3;
+    string type = 4;
+    google.protobuf.Int64Value review_id = 5;
+    string stamped_at = 6;
+  }
+}
+
+message Register {
+  int32 idRegister = 1;
+  string userType = 2;
+  string eMail = 3;
+  string passWord = 4;
+  string nickName = 5;
+  int32 location = 6;
+  int32 birthYear = 7;
+  int32 skinType = 8;
+  int32 gender = 9;
+  string userTel = 10;
+  string userZipcode = 11;
+  string userAddress = 12;
+  string userAddressMore = 13;
+  string userName = 14;
+  int32 registerScore = 15;
+  int32 registerRank = 16;
+  int32 eventCount = 17;
+  int32 reviewCount = 18;
+  int32 likeCount = 19;
+  bool isActivity = 20;
+  bool isBlack = 21;
+  bool isBlind = 22;
+  int32 userImg = 23;
+  bool isPush = 30;
+  bool isUserPush = 31;
+  int32 recommender = 32;
+  int32 adminLevel = 33;
+  int32 department = 34;
+  int32 position = 35;
+  string create_date = 36;
+  string modified_date = 37;
+  string last_date = 38;
+  int32 loginCount = 39;
+  string ipAddress = 40;
+  string fileOrgName = 41;
+  string fileSaveName = 42;
+  string fileDir = 43;
+  int32 fileSize = 44;
+  string fileType = 45;
+  string app_version = 46;
+  string inactivated_date = 47;
+  string closed_date = 48;
+  int32 grade = 49;
+  string sns_direct_id = 50;
+
+  string image_url = 101;
+  int32 age = 102;
+  string is_closed = 103;
+  google.protobuf.BoolValue is_favorite = 104; // (위시리스트,관심제품)
+
+  int64 pouch_interest_count = 105;// 관심 캐스트 개수
+  int64 following_count = 106;// 팔로잉 개수
+  int64 follower_count = 107;// 팔로워 개수
+  int64 wish_count = 108;//위시리스트 개수
+  google.protobuf.BoolValue is_following = 109;//타인이 해당 사용자를 팔로우 하는지 아닌지 유무를 나타내는 플래그값 (읽기용)
+  int32 blind_review_count = 110;//블라인드 리뷰 개서 - 읽기용
+
+  bool block_flag = 111;
+
+  Grade top_category_grade = 201; //카테고리 등급 Top 1
+
+  message Grade {
+    int64 id_register = 1; //회원 항번
+    string name = 2; //카테고리/브랜드 명
+    int64 review_count = 3; //리뷰 수
+    int32 reviewer_grade = 4; //리뷰어 등급
+    int64 id = 5; //2차 카테고리 항번/브랜드 항번
+  }
+}
+
+message Ratings {
+
+  int32 point_1 = 1;
+  int32 point_2 = 2;
+  int32 point_3 = 3;
+  int32 point_4 = 4;
+  int32 point_5 = 5;
+
+}
+
+message Scoreboard {
+
+  int32 blinded = 1;
+
+  Ratings ratings = 2;
+
+}
+
+message MonthlyProduct {
+  int64 idMonthlyProduct = 1;
+  int32 linkType = 2;
+  string linkCode = 3;
+
+  float banner_ratio = 4;
+  int32 idProduct = 5;
+  string productTitle = 6;
+  string start_date = 7;
+  string end_date = 8;
+  google.protobuf.BoolValue is_custom = 9;//false 가 올수도 있으므로
+  int32 isFirstCategory = 10; //통합검색>카테고리별 메뉴(A) 비전시 0, 제품링크 1, 광고링크2
+
+  string banner_image_url = 51;//비즈니스 로직
+  string ratio = 52;//이미지 비율
+  Link link = 53;
+
+  int32 is_home = 54; //메인홈 비전시 0, 제품링크 1, 광고링크2
+  int32 is_month = 55; //이달의 신제품 리스트 비전시 0, 제품링크 1, 광고링크2
+  int32 is_product = 56; //제품상세(B) 비전시 0, 광고링크1 -> (2021.06.01 어드민에서만 쓰이는 값 현재는 앱에서는 안쓰임)
+  google.protobuf.Int64Value display_brand_id = 57; //동일 브랜드 제품에서 노출: 브랜드항번 -> (2021.06.01 어드민에서만 쓰이는 값 현재는 앱에서는 안쓰임)
+
+}
+
+message CategoryLike {
+  int64 id = 1;
+  int64 register_id = 2;
+  int64 category2_id = 3;
+  string category_title = 11;//비즈니스 로직상 필요한 필드
+}
+
+message BrandLike {
+  int64  id = 1;
+  int64  register_id = 2;
+  int64  brand_id = 3;
+  string brand_title = 11;//비즈니스 로직상 필요한 필드
+  google.protobuf.BoolValue is_favorite = 12;//비즈니스 로직상 필요한 필드
+
+  string brand_image_url = 101;//마이 페이지에서 필요
+}
+
+message Paging {
+  google.protobuf.Int64Value limit = 1; //null 허용
+  google.protobuf.Int64Value offset = 2; //null 허용, 페이지의 offset
+  google.protobuf.Int64Value cursor = 3; //null 허용, 페이지의 number.
+  google.protobuf.Int64Value id = 4; //null 허용, 첫번째 id 값.
+  google.protobuf.StringValue seq = 5; //null 허용, seq 값.
+}
+
+message NextId {
+  google.protobuf.Int64Value next_id = 1; //다음 페이지가 없을경우 null, 다음 페이지의 첫번째 id 값.
+}
+
+message NextOffset {
+  google.protobuf.Int64Value next_offset = 1; //다음 페이지가 없을경우 null, 다음 페이지의 offset
+}
+
+message NextCursor {
+  google.protobuf.Int64Value next_cursor = 1; //다음 페이지가 없을경우 null, 다음 페이지의 number
+}
+
+message NextSeq {
+  google.protobuf.StringValue next_seq = 1; //다음 페이지가 없을경우 null, 다음 페이지의 seq
+}
+
+message CommonBanner {
+  int32 idBanner = 1;
+  string bannerType = 2;
+  string bannerTitle = 3;
+  int32 bannerLinkType = 4;
+  string bannerLinkCode = 5;
+  string start_date = 6;
+  string end_date = 7;
+  int32 sortKey = 8;
+  int32 isDisplay = 9;
+  int32 bannerImg = 10;
+  string create_date = 11;
+  string modified_date = 12;
+  string fileOrgName = 13;
+  string fileSaveName = 14;
+  string fileDir = 15;
+  int32 fileSize = 16;
+  string fileType = 17;
+  string oldFileSaveName = 18;
+  string oldFileDir = 19;
+
+  string image_url = 101;
+
+  Link link = 201;
+}
+
+message ProductCollection {
+  int64 id = 1;
+  string code = 2;
+  int64 created_at = 3;
+  int64 updated_at = 4;
+  string title = 5;
+  string body = 6;
+  int64 start_on = 7;
+  int64 end_on = 8;
+  int32 sort = 9;
+  string hit = 10;
+  int64 admin_account_id = 11;
+  string icon_path = 12;
+  string short_wording = 13;
+
+  int32 product_count = 101;
+}
+
+message ProductCollectionMap {
+  int64 id = 1;
+  int64 created_at = 2;
+  string product_collection_code = 3;
+  int64 product_id = 4;
+  Doc doc = 5;
+
+  Product product = 201;
+
+  message Doc {
+    int32 weekly_winner_count = 1;
+    bool is_new = 2;
+  }
+}
+
+message FirstCategoryV2 {
+  int64 idFirstCategory = 1;
+  string firstCategoryText = 2;
+  repeated SecondCategoryV2 second_categories = 3;
+
+}
+
+message SecondCategoryV2 {
+  int32 idSecondCategory = 1;
+  int32 idFirstCategory = 2;
+  string secondCategoryText = 3;
+  string secondCategoryShortText = 4;
+  string keyWord = 5;
+  int32 priceRange1 = 6;
+  int32 priceRange2 = 7;
+  int32 priceRange3 = 8;
+  int32 priceGap = 9;
+  int32 sortKey = 10;
+  int32 isDisplay = 11;
+  string create_date = 12;
+  string modified_date = 13;
+  bool isNew = 14;
+  int32 isReviewKeyword = 15;
+  bool isDeleted = 16;
+  bool showMergedChildren = 17;
+
+  google.protobuf.BoolValue is_favorite = 51;//관심 카테고리인지 체크하는 플래그
+}
+
+message BrandBanner {
+  int32 idBrandBanner = 1;
+  int32 idBrand = 2;
+  string bannerTitle = 3;
+  int32 bannerImg = 4;
+  int32 sortKey = 5;
+  bool isDisplay = 6;
+  string create_date = 7;
+  string modified_date = 8;
+  int32 view_type = 9;
+
+  string image_url = 101;
+  Link link = 201;
+}
+
+message Event {
+  int64 idEvent = 1; //이벤트 항번
+  string eventTitle = 2; //이벤트 제목
+  string clientName = 3; //브랜드 이름
+  int64 replyCount = 4; //댓글 수(참여 숫자)
+  int64 startDate = 5; // 이벤트 시작
+  int64 endDate = 6;// 이벤트 종료일
+  int64 candidateCount = 7; //응모자 수
+  int32 eventType = 8; //이벤트 타입
+  string eventDesc = 9; //이벤트 설명
+  int32 prerequisiteLimit = 10; //참여가능한 리뷰 작성 수
+  int32 btnLinkType = 11; //링크 유형
+  string btnLinkCode = 12; //링크 코드
+  bool isReply = 13; //댓글 활용 여부
+  string replyHolderText = 14; //댓글 플레이스 홀더 텍스트
+  string btnLinkText = 15; //참여 버튼 텍스트
+  string surveyLink = 16; //설문지 링크(설문단 이벤트일 경우 사용)
+  int64 noticeLinkNum = 17; //공지사항 번호
+  int32 prerequisiteType = 18; //참여조건
+  bool isAllDate = 19; //기간 무관 여부
+  bool isAllCategory = 20; //카테고리 설정 여부, deprecated(2022.11.24): prerequisiteTarget 으로 대체
+  int64 prerequisiteStartDate = 21; //기간 무관이 아닐 경우 이벤트 응모 조건 시작일(ex) 리뷰형 이벤트일 경우 리뷰 작성 기간 범위)
+  int64 prerequisiteEndDate = 22; //기간 무관이 아닐 경우 이벤트 응모 조건 종료일(ex) 리뷰형 이벤트일 경우 리뷰 작성 기간 범위)
+  string thirdAgreeCompany = 23; //제공받는 업체(제3자 정보제공 동의)
+  string thirdAgreePurpose = 24; //제공 목적(제3자 정보제공 동의)
+  string thirdAgreeInfo = 25; //제공정보(제3자 정보제공 동의)
+  string thirdAgreeDate = 26; //보유 및 이용기간(제3자 정보제공 동의)
+  int64 winner_issue_on = 27; //당첨자 발표 예정일(date)
+  int64 winner_issued_at = 28; //당첨자 발표 확정일(timestamp)
+  int32 winner_limit = 29; //참여 가능 인원
+  string winner_description = 30; //당첨자 발표 설명
+  string prerequisite_target = 31; //참여조건 세부 정보
+
+  bool is_can_apply = 101; //유저의 이벤트 응모 가능 여부(true: 응모 가능, false: 응모 불가), 개인화
+  bool is_apply = 102; //유저의 이벤트 응모 여부(true: 응모, false: 미응모), 개인화
+  bool is_prize = 103; //유저의 이벤트 당첨 여부(true: 당첨, false: 미당첨), 개인화
+  repeated CategoryGroup category_group_list = 104; //이벤트 카테고리 목록
+  repeated Brand brand_group_list = 105; //이벤트 브랜드 목록
+
+  EventContent event_content = 201;
+  EventCandidate event_candidate = 202;
+  Product product = 203;
+  Brand brand = 204;
+  Link link = 205;
+
+  repeated Product product_list = 206; //이벤트 당첨자 발표 상세 당첨 제품 관련
+  repeated EventProduct event_product_List = 207; //이벤트 제품 리스트
+}
+
+message EventProduct {
+  int64 idEvent = 1;
+  int32 idProduct = 2;
+  string survey_link = 3;
+
+  Product product = 101;
+}
+
+message EventContent {
+  int32 idEvent = 1;
+  string fileOrgName = 2;
+  string fileSaveName = 3;
+  string fileDir = 4;
+  int32 fileSize = 5;
+  string fileType = 6;
+  string eventText = 7;
+  int64 createdDate = 8;
+  int64 modifiedDate = 9;
+  float ratio = 10;
+  string eventImage = 11; //이벤트 이미지
+
+  string image_url = 101;
+}
+
+message EventCandidate {
+  int32 idEvent = 1;
+  int32 idRegister = 2;
+  bool isPrize = 3; //이벤트 응모, 당첨 상태 -> 0: 응모, 1: 당첨
+  int64 createdDate = 4;
+  int64 modifiedDate = 5;
+}
+
+message EventReply {
+  int32 idRegister = 1; //회원 항번
+  int32 idEvent = 2; //이벤트 항번
+  string eventReply = 3; //이벤트 댓글
+  bool isDisplay = 4; //노출 여부
+  bool isDelete = 5; //삭제 여부
+  int64 createdDate = 6; //생성일
+  int64 modifiedDate = 7; //수정일
+  int32 id = 8; //이벤트 댓글 테이블 항번
+}
+
+message ProductGood {
+  int32 id = 1;
+  int32 product_id = 2;
+  int32 goods_count = 3;
+  int32 max_price = 4;
+  int32 min_price = 5;
+}
+
+message EventQuestion {
+  int32 idEventQuestion = 1; //이벤트 신청조건 테이블 항번
+  int32 idEvent = 2; //이벤트 항번
+  int32 applyType = 3; //신청방법 타입(1:옵션선택, 2: 텍스트입력, 3:이미지업로드, 4:단일형)
+  string question = 4; //
+  string options = 5; //신청방법
+  int64 createdDate = 6; //생성일
+  int64 modifiedDate = 7; //수정일
+
+  Event event_third_agree = 201; //이벤트 테이블 제 3자 정보 제공 관련 컬럼
+}
+
+message Notices {
+  int64 id = 1;
+  string board_type_cd = 2;
+  string board_category_cd = 3;
+  bool is_display = 4;
+  string subject = 5;
+  string content = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message Faq {
+  int64 id = 1;
+  string static_code = 2;
+  string question = 3;
+  string answer = 4;
+  int64 created_at = 5;
+  int64 created_by = 6;
+  int64 updated_at = 7;
+  int64 updated_by = 8;
+  int64 displayed_at = 9;
+  bool is_best = 10;
+}
+
+message StaticCode {
+  string code = 1;
+  string name = 2;
+  int64 created_at = 3;
+  int64 updated_at = 4;
+  int64 deleted_at = 5;
+  string parent_code = 6;
+  string doc = 7;
+}
+
+message BrandType {
+  int64 idBrandType = 1;
+  string brandTypeName = 2;
+  bool isDisplay = 3;
+  string create_date = 4;
+  string modify_date = 5;
+  string brandTypecol = 6;
+  int64 priceRange1 = 7;
+  int64 priceRange2 = 8;
+  int64 priceRange3 = 9;
+  int64 priceGap = 10;
+  string fileOrgName = 11;
+  string fileSaveName = 12;
+  string fileDir = 13;
+  int64 fileSize = 14;
+  string fileType = 15;
+  string newFileSaveName = 16;
+  string newFileDir = 17;
+  int32 orderNum = 18;
+
+  string image_url = 101;
+}
+
+message BrandCategory {
+  int64 idBrandCategory = 1;
+  string brandCategoryText = 2;
+  bool isDisplay = 3;
+  int32 sortKey = 4;
+  string fileDir = 5;
+  string fileSaveName = 6;
+  string create_date = 7;
+  string modified_date = 8;
+
+  string image_url = 101;
+}
+
+message Keyword {
+  int64 idKeyword = 1;
+  string keywordText = 2;
+  int64 sortKey = 3;
+  bool isDisplay = 4;
+  string create_date = 5;
+  string modified_date = 6;
+}
+
+message Pouch {
+  int64 idPouch = 1;
+  string pouchTitle = 2;
+  PouchCategory pouch_category = 3;
+  AdminAccount admin_account = 4;
+  string create_date = 5;
+  string pouchText = 6;
+  int64 recommendCount = 7;
+  int64 hits_count = 8;
+
+  string pouch_image_url = 101;
+  google.protobuf.BoolValue is_new = 102;
+  google.protobuf.BoolValue is_interest = 103;
+  repeated string tags = 104;
+  google.protobuf.BoolValue is_image_v2 = 105;
+
+  int64  cast_like_count = 111;//캐스트 좋아요 개수
+  int64  cast_interest_count = 112;//캐스트 관심 개수
+  int64  cast_comment_count = 113;//캐스트 댓글 개수
+
+  string start_date = 114;//전시 시작일
+  string end_date = 115;//전시 종료일
+
+  EventAdInfo event_ad_info = 120;
+
+  int32 is_best = 121; // 1-> 베스트 캐스트 , 0 -> 베스트 캐스트 아님
+  int64 best_start_on = 122; // 노출 시작
+  int64 best_end_on = 123;// 노출 종료
+
+  string module_list = 125;//캐스트 모듈 본문
+  string module_product_list = 126;//캐스트 모듈 본문내 제품항번
+  map<int64, Product> module_products_info = 127;//캐스트 모듈 본문내 제품의 상세정보
+  string description = 128;
+  string main_image = 129;
+  repeated Product product_list = 130;
+}
+
+message PouchCategory {
+  int64 idPouchCategory = 1;
+  string pouchCategoryText = 2;
+
+  google.protobuf.BoolValue is_new = 101;
+
+  string main_title = 102; //메뉴 타이틀
+  int32 is_main_category = 103;//1-> 대표 카테고리, 0 -> 대표 카테고리
+  int64 main_category_order = 104;//베스트 카테고리 순서
+}
+
+message AdminAccount {
+  int64 idRegister = 1;
+  string email = 2;
+  string nickName = 3;
+  string fileSaveName = 4;
+  string fileDir = 5;
+
+  string image_url = 101;//작성자 이미지 경로 (캐스트)
+}
+
+message PouchComment {
+  int64 idPouchComment = 1;
+  Register register = 2;
+  Pouch pouch = 3;
+  string pouchComment = 4;
+  google.protobuf.BoolValue isDisplay = 5;
+  string create_date = 6;
+}
+
+message ProductTheme {
+  int64 id = 1;
+  google.protobuf.StringValue created_at = 2;
+  google.protobuf.StringValue updated_at = 3;
+  string title = 4;
+  string body = 5;
+  google.protobuf.StringValue start_on = 6;
+  google.protobuf.StringValue end_on = 7;
+  google.protobuf.Int64Value sort = 8;
+  int64 hit = 9;
+  AdminAccount admin_account = 10;//작성자
+
+  repeated Product products = 51;//비즈니스 로직상 필요
+  google.protobuf.BoolValue is_ad = 52;//광고 유무 (추후 활용될 수 있다고 함) 지금은 무조건 false
+}
+
+message ProductThemeMap {
+  int64 id = 1;
+  google.protobuf.StringValue created_at = 2;
+  int64 product_theme_id = 3;
+  int64 product_id = 4; //제품항번 row 값
+  int64 sort = 5;
+
+  Product product = 51;//비즈니스 로직상 필요할 수도 있어서 포함
+
+  CategoryGroup category_group = 52;
+}
+
+message HitProducts {
+  int64 idHitProducts = 1;
+  string hitText = 2;
+  google.protobuf.BoolValue isDisplay = 3;
+  string create_date = 4;
+  string modified_date = 5;
+  string fileOrgName = 6;
+  string fileSaveName = 7;
+  string fileDir = 8;
+  int64 fileSize = 9;
+  string fileType = 10;
+  string x_fileDir = 11;
+  string x_fileSaveName = 12;
+  string x_fileRatio = 13;
+  string y_fileDir = 14;
+  string y_fileRatio = 15;
+  string cover_fileDir = 16;
+  string cover_fileSaveName = 17;
+  double cover_fileRatio = 18;
+  string choice_fileDir = 19;
+  string choice_fileSaveName = 20;
+  double choice_fileRatio = 21;
+  google.protobuf.Int32Value version = 22;
+  string doc = 23;
+
+  double image_ratio = 101;//old 버전에서 사용 (리스트 조회 api 에서 사용)
+  string choice_image_url = 102;
+  string cover_image_url = 103;
+  string pc_web_image_url = 104;
+  double pc_web_image_ratio = 105;
+  repeated HitCategory hit_categories = 106;
+  string award_image_url = 107;
+
+  google.protobuf.StringValue award_icon_url = 109;//어워드 아이콘 추가
+
+}
+
+message HitCategory {
+  int32 idHitCategory = 1;
+  int32 idHitProducts = 2;
+  string categoryText = 3;
+  string categorySummary = 4;
+  int32 parentId = 5;
+  int32 sortKey = 6;
+  string create_date = 7;
+  string modified_date = 8;
+
+  string hitText = 101;
+  repeated Description description_list = 102;
+
+  bool is_summary = 103; //old award
+  int64 mainCategoryId = 104; //old award
+  int64 subCategoryId = 105; //old award
+
+  int64 idFirstCategory = 106;
+  int64 idSecondCategory = 107;
+  int64 idThirdCategory = 108;
+
+  int32 award_version = 109; //award version
+  string award_icon_url = 110; //award 아이콘
+
+  repeated HitCategory hit_categories = 201;
+  repeated HitCategoryMapping hit_category_mappings = 202;
+
+  message Description {
+    string category_text = 1;
+    string rank = 2;
+    int64 idFirstCategory = 3;
+    int64 idSecondCategory = 4;
+    int64 idThirdCategory = 5;
+  }
+}
+
+message HitCategoryMapping {
+  int32 idProduct = 1;
+  int32 idHitCategory = 2;
+  int32 sortKey = 3;
+  string rankLabel = 4;
+  float ratingAvg = 5;
+  int32 reviewCount = 6;
+  string start_date = 7;
+  string end_date = 8;
+  string create_date = 9;
+  string modified_date = 10;
+  int32 id = 11;
+
+  Product product = 101;
+  HitCategory hit_category = 102;
+}
+
+message CategoryGrade {
+
+  int64 id = 1;
+  int64 created_at = 2;
+
+  Register register = 3;
+  SecondCategoryV2 second_category_v2 = 4;
+  FirstCategoryV2 first_category_v2 = 5;
+
+  int64 review_count = 6;
+  int64 rating_avg = 7;
+
+}
+
+message BrandGrade {
+
+  int64 id = 1;
+  int64 created_at = 2;
+
+  Register register = 3;
+  Brand brand = 4;
+
+  int64 review_count = 5;
+  int64 rating_avg = 6;
+
+}
+
+message GlowpickFactor {
+  int32 factor_idx = 1;
+  int32 factor_index = 2;
+  string factor_korean = 3;
+  string factor_english = 4;
+  string factor_ewg = 5;
+  int32 factor_ewg_min = 6;
+  int32 factor_ewg_max = 7;
+  string factor_purpose = 8;
+  string factor_origin = 9;
+  string factor_nickname = 10;
+  string factor_pdtname = 11;
+  string factor_etc = 12;
+  int32 use_cnt = 13;
+  string create_date = 14;
+
+  string hazard = 51;
+}
+
+message SearchReviewTag {
+
+  google.protobuf.StringValue search_word = 1;
+
+  //한줄평에 해당하는 유사태그
+  repeated string title_tags = 2;
+
+  //리뷰 검색시에 검색어에 해당하는 유사태그
+  repeated string review_text_tags = 3;
+
+}
+
+// 단말기 기본정보
+message AppMeta {
+  string os = 1;
+  string os_version = 2;
+  string app_version = 3;
+  string device_model = 4;
+}
+
+// store banner
+message BrandTypeBanner {
+  int64 idBrandTypeBanner = 1;
+  int64 idBrandType = 2;
+  string bannerTitle = 3;
+  int64 bannerImg = 4;
+  int64 sortKey = 5;
+  bool isDisplay = 6;
+  string fileOrgName = 7;
+  string fileSaveName = 8;
+  string fileDir = 9;
+
+  string img_url = 101;
+  Link link = 201;
+
+}
+
+message MonthlyProducts {
+  CategoryGroup category_info = 1;
+  repeated Product products = 2;
+
+  Link link = 201;
+}
+
+message MessageBox {
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 group_id = 3;
+  MessageCategory message_category = 4;
+  string message = 5;
+  int64 reference_id = 6;
+  string created_at = 7;
+  int64 updated_at = 8;
+  bool is_active = 9;
+
+  Product product = 101;
+  Register register = 102;
+  bool is_checked = 103;//체크했는지 안했는지
+  string target_url = 104;
+  Noti noti = 105;
+  google.protobuf.StringValue doc = 106;
+  Qna qna = 107;
+  string ref_type = 108;
+}
+
+message MessageCategory {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string img_path = 4;
+}
+
+message PushList {
+  int64  idPush = 1;
+  string pushText = 2;
+  int32 linkType = 3;
+  string linkCode = 4;
+  string bigPicture = 6;
+}
+
+message Noti {
+  int64 idNoti = 1;
+  string notiText = 2;
+  string iosText = 3;
+  string bigPicture = 4;
+  string bitContentTitle = 5;
+}
+
+message Link {
+  int64 id = 1;
+  string ref_type = 2;
+  int64 ref_id = 3;
+  google.protobuf.StringValue type = 4;
+  google.protobuf.StringValue value = 5;
+}
+
+message MobileCertification {
+  int64 id = 1; //항번
+  int64 register_id = 2; //회원 항번
+  string phone = 3; //인증 회원 휴대폰 번호
+  string certified_code = 4; //인증코드
+  int64 invalidated_at = 5; //인증 일시
+  int64 expired_at = 6; //인증코드 만료 일시
+  int64 created_at = 7; //생성일
+  int64 updated_at = 8; //수정일
+
+  google.protobuf.BoolValue isCertification = 101; //회원의 휴대폰 인증 여부 플래그값
+}
+
+/*
+ * 업데이트 라벨 표시 관련 데이터
+ */
+message UpdateLabel {
+  google.protobuf.Int64Value total_count = 1; //업데이트 기준에 부합하는 데이터들의 카운트 값
+  google.protobuf.Int64Value target_id = 2; //업데이트 기준에 부합하는 데이터들 중 최신 데이터 항번 or 기준이 되는 데이터 항번
+}
+
+
+message SearchTag {
+  int64 id = 1; //항번
+  int64 created_at = 2; //생성일
+  string ref_type = 3; //태그 타입
+  int64 ref_id = 4; //태그 타겟 항번 ex> event_id, product_theme_id, product_collection_id ...
+  string tag = 5;
+  int64 parent_id = 6;
+  string type = 7;
+}
+/*
+ * 제품 관련 네이버 블로그 검색 데이터
+ */
+message ProductNaverBlog {
+  int64 id = 1; //항번
+  int64 product_id = 2; //제품항번
+  string title = 3; //블로그 포스팅 제목
+  string description = 4; //블로그 포스팅 설명
+  string link = 5; //블로그 포스팅 링크
+  string blogger_name = 6; //블로거 네임
+  string blogger_link = 7; //블로거 링크
+  int64 created_at = 8; //생성일
+  int64 updated_at = 9; //수정일
+}
+
+
+/*
+ * 이벤트광고 테이블 추가
+ */
+message EventAd {
+  int64 id = 1; //항번
+  int64 created_at = 2; //생성일
+  int64 updated_at = 3; //수정일
+  int64 admin_account_id = 4; //관리자 항번
+  string division = 5; //구분
+  string division_type = 6; //분류
+  int64 division_id = 7; //내부항번 (캐스트/이벤트)
+
+  repeated EventAdProduct event_ed_products = 8; //제품 맵핑용
+
+  string intro = 9; //광고문구
+  string title = 10; //광고문구
+  string url = 11;   //url
+  int64 start_on = 12; //노출 시작일
+  int64 end_on = 13; //노출 종료일
+
+}
+
+/*
+ * 이벤트광고 제품 맵핑 테이블 추가
+ */
+message EventAdProduct {
+
+  int64 id = 1; //항번
+  int64 event_ad_id = 2; //이벤트 광고 항번
+  repeated Product product = 3;
+
+}
+
+/*
+ * 제품 -> 이벤트 광고 정보
+ */
+message EventAdInfo {
+
+  bool division = 1; //구분 (외부 true / 내부 false)
+  string division_type = 2; //분류
+  int64 division_id = 3; //내부항번 (캐스트/이벤트)
+  string intro = 4; //광고문구
+  string url = 5;   //url
+  int64 id = 6; //이벤트광고
+
+}
+
+//--------------------------------출석체크 이벤트--------------------------------
+message Stamp {
+  int64 id = 1; //id
+  int64 admin_register_id = 2; //이벤트를 등록한 관리자 ID
+  string type = 3; //보상 유형(경품, 티켓)
+  string title = 4; //제목
+  string sub_title = 5; //설명
+  string content = 6; //내용
+  string message = 7; //당첨자 공지 메시지
+  bool is_display = 8; //노출 여부
+  int64 start_on = 9; //시작 년월일시
+  int64 finish_on = 10; //종료 년월일시
+  int64 reward_on = 11; //당첨 발표 년월일시
+  int64 select_on = 12; //당첨 선정 년월일시
+  bool has_comment = 13; //댓글 여부
+  string calendar_on = 14; //캘린더 표시 기준년월
+  int64 max_alternative = 15; //최대 대체 출석 가능 수
+  int64 max_review_for_alternative = 16; //대체 출석을 위한 최대 리뷰작성 가능 수
+  int64 max_category_like_for_alternative = 17; //대체 출석을 위한 최대 관심설정 가능 수
+  string comment_default = 18; //미출석일 있을 때 코멘트(대체출석 가능한 경우)
+  string comment_cheering = 19; //미출석일 있을 때 코멘트(대체출석 불가능한 경우)
+  string comment_accomplish = 20; //미출석일 없이 모두 개근한 경우 코멘트
+  string comment_placeholder = 21; //댓글 작성란의 placeholder 텍스트
+  int64 created_at = 22; //created_at
+  int64 updated_at = 23; //updated_at
+  int64 deleted_at = 24; //deleted_at
+
+  StampDoc doc = 25; //doc
+
+  message StampDoc {
+    string calendar_background_image = 1; //캘린더 백그라운드 이미지
+    string calendar_stamp_today_image = 2; //캘린더 오늘 이미지
+    string calendar_stamp_normal_image = 3; //캘린더 정상출석용 도장 이미지
+    string calendar_stamp_alternative_image = 4; //캘린더 대체출석용 도장 이미지
+    string calendar_color = 5; //캘린더 컬러(요일,숫자,라인)
+    string calendar_today_color = 6; //캘린더 오늘일자 컬러(텍스트)
+  }
+}
+
+//--------------------------------출석체크 이벤트 달성 조건--------------------------------
+message StampCondition {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  string title = 3; //제목
+  int64 sum_stamp = 4; //누적 출석 횟수
+  int64 sum_winner = 5; //당첨 인원
+  int64 created_at = 6; //created_at
+  int64 updated_at = 7; //updated_at
+}
+
+//--------------------------------출석체크 이벤트 참여자 정보--------------------------------
+message StampRegister {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  int64 register_id = 3; //참여자 ID
+  int64 admin_register_id = 4; //강제출석을 등록한 관리자 ID
+  string type = 5; //출석 유형(정상, 대체)
+  int64 review_id = 6; //대체출석의 경우 연관된 리뷰 ID
+  int64 category_like_id = 7; //대체출석의 경우 연관된 관심설정 ID
+  int64 stamped_at = 8; //출석 년월일
+  int64 created_at = 9; //created_at
+  int64 updated_at = 10; //updated_at
+}
+
+//--------------------------------출석체크 이벤트 경품--------------------------------
+message StampProduct {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  int64 product_id = 3; //제품 ID
+  int64 quantity = 4; //제공 갯수
+  int64 created_at = 5; //created_at
+  int64 updated_at = 6; //updated_at
+}
+
+//--------------------------------출석체크 이벤트 티켓--------------------------------
+message StampTicket {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  int64 event_id = 3; //이벤트 ID
+  int64 quantity = 4; //제공 갯수
+  int64 created_at = 5; //created_at
+  int64 updated_at = 6; //updated_at
+}
+
+//--------------------------------출석체크 이벤트 댓글--------------------------------
+message StampComment {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  int64 register_id = 3; //참여자 ID
+  string content = 4; //내용
+  bool is_display = 5; //노출 여부
+  int64 created_at = 6; //created_at
+  int64 updated_at = 7; //updated_at
+  int64 deleted_at = 8; //deleted_at
+}
+
+//--------------------------------출석체크 이벤트 당첨자--------------------------------
+message StampWinner {
+  int64 id = 1; //id
+  int64 stamp_id = 2; //출석체크 이벤트 ID
+  int64 stamp_condition_id = 3; //출석체크 이벤트 달성 조건 ID
+  int64 register_id = 4; //참여자 ID
+  int64 created_at = 5; //created_at
+  int64 updated_at = 6; //updated_at
+}
+
+message Qna {
+
+  int64 id = 1; //qna(pk)
+  Register register = 2;
+  string title = 3;//qna 제목
+  string text = 4;//qna 본문
+  int64 hit = 5;//조회수
+  string doc = 6;//사진 정보 (json array)
+  int64 created_at = 7;
+  int64 updated_at = 8;
+  int64 deleted_at = 9;
+
+  //db-field 아닌 것들(실시간)에서 사용할 것들
+  int64 interest_count = 10;
+  int64 reply_count = 11;
+  string blind_reason = 12;//아직 구체화는 안시킴 (바뀔 수 있음)
+  repeated QnaImage qna_image_list = 13;
+
+  QnaReply latest_qna_reply = 14;
+
+  google.protobuf.BoolValue is_interest = 15;//궁금해요 유무
+
+  string state = 16;//상태 (정상,차단,검수)
+
+  repeated string tags = 18;
+
+  string interest_domain = 19;
+
+  repeated QnaCategory qna_categories = 20;
+
+  repeated QnaBrand qna_brands = 21;
+
+  string type = 22;//swipe 영역 타입 구분 [most_view, most_reply, most_interest] (가장 많이 본, 가장 답면이 많은, 공감을 많이 받은)
+
+  google.protobuf.StringValue block_info = 23;
+
+  int64 start_at = 24;
+  int64 expired_at = 25;
+  repeated string causes = 26;
+
+  int64 latest_at = 27;
+
+  QnaLog qna_log = 28;
+
+  repeated QnaImage images = 100; //Q&A 이미 리스트
+  repeated Product products = 101; //Q&A 제품 리스트
+  repeated Product reply_products = 102; //Q&A 답변/댓글 제품 리스트
+}
+
+message QnaImage {
+
+  string bucket = 1;
+  string url = 2;
+  string key = 3;
+  string state = 4;//차단,정상 <- 그런 플래그 값들 들어갈 듯
+  AwsPhotoBlockReason awsPhotoBlockReason = 5;
+}
+
+message AwsPhotoBlockReason {
+  repeated ModerationLabels moderationLabels = 1;
+  string moderateModelVersion = 2;
+}
+
+message ModerationLabels {
+  float confidence = 1;
+  string name = 2;
+  string parentName = 3;
+}
+
+message QnaBrand {
+
+  int64 id = 1;//qna_brand(pk)
+  Qna qna = 2;
+  Brand brand = 3;
+  int64 created_at = 4;
+  int32 sort = 5;
+}
+
+message QnaCategory {
+
+  int64 id = 1;
+  Qna qna = 2;
+  int64  created_at = 4;
+  int32 sort = 5;
+  CategoryGroup category_group = 6;
+}
+
+message QnaInterest {
+
+  int64 id = 1;
+  Qna qna = 2;
+  Register register = 3;
+  string action = 4;
+
+  int64 created_at = 7;
+  int64 updated_at = 8;
+  int64 deleted_at = 9;
+}
+
+message QnaProduct {
+
+  int64 id = 1; //pk(id)
+  Qna qna = 2;
+  Product product = 3;
+  int64 created_at = 4;
+}
+
+//Q/A 답변/댓글 공통
+message QnaReply {
+
+  int64 id = 1; //pk(id)
+  int64 qna_id = 2; //질문 항번
+  int64 register_id = 3; //회원 항번
+  string text = 4; //답변/댓글 본문
+  int64 parent_id = 5; //댓글일 경우 상위 답변 항번
+  int64 child_count = 6; //답변일 경우 댓글 수
+  int64 like_count = 7; //답변/댓글 좋아요 수
+  int64 created_at = 8; //답변/댓글 생성일
+  int64 updated_at = 9; //답변/댓글 수정일
+  google.protobuf.Int64Value deleted_at = 10; //답변/댓글 삭제일
+  string state = 11; //답변/댓글 상태
+
+  google.protobuf.BoolValue is_like = 101; //답변/댓글 좋아요 여부(개인화)
+  google.protobuf.BoolValue is_register_block = 102; //답변/댓글 1:1 차단 여부(개인화)
+  google.protobuf.StringValue block_info = 103; //답변/댓글 차단 사유
+
+  Qna qna = 201; //질문 정보
+  Register register = 202;  //작성 회원 정보
+
+  repeated Product products = 203;//매핑된 제품
+
+  bool is_reply_hidden = 1000; //프론트에서만 사용하는 필드(프론트측 요청으로 생성)
+}
+
+message QnaReplyLike {
+
+  int64 id = 1; //pk(id)
+  Qna qna = 2; //qna 정보
+  Register register = 3; //회원 정보
+  int64  created_at = 4; //생성일
+}
+
+message QnaReport {
+
+  int64 id = 1; //pk(id)
+  Register register = 2; //신고자
+  AdminAccount admin_account = 3; //처리자
+  string ref_type = 4; //참조 대상 테이블
+  int64 ref_id = 5; //참조 대상 테이블 항번
+  string code = 6; //신고 코드
+  string text = 7; //신고사유
+  string state = 8; //신고 처리 상태
+  string ip_address = 9; //신고자 ip address
+  int64  created_at = 10; //신고일
+  int64  updated_at = 11; //처리일
+}
+
+message QnaBlock {
+
+  int64 id = 1; //pk(id)
+  string ref_type = 2; //처리대상
+  int64 ref_id = 3; //처리대상 항번
+  string code = 4; //처리 사유 항번
+  int64  created_at = 5; //생성일
+}
+
+message QnaRegisterBlock {
+
+  int64 id = 1; //pk(id)
+  Register report_register = 2; //차단 한 회원
+  Register target_register = 3; //차단 대상 회원
+  int64 created_at = 4; //차단일
+}
+
+message QnaRegisterStateLog {
+
+  int64 id = 1; //pk(id)
+  int64 register_id = 2; //회원항번
+  int64 admin_account_id = 3; //처리자항번
+  string state = 4; //회원 상태
+  int64  created_at = 5; //생성일
+  int64  expired_at = 6; //만료일
+
+  Register register = 101; //회원
+  AdminAccount admin_account = 102; //처리한 관리자
+}
+
+message QnaLog {
+
+  int64 id = 1; //pk(id)
+  int64 qna_id = 2; //질문 항번
+  int64 register_id = 3; //회원항번
+  string doc = 4; // message, payload, state, blockCauses
+  string action = 5; // 필터
+  string ref_type = 6; //행위 대상 테이블
+  int64 ref_id = 7; // 행위 대상 테이블 항번
+  int64 created_at = 8;
+
+  //doc 에 저장된 항목
+  string message = 9;
+  string payload = 10;
+  string state = 11;
+  repeated string block_causes = 12;
+  int64 parent_id = 13;
+
+  int64 actioned_at = 101; //문구에 노출되는 시간
+}
+
+//띠 배너
+message LineBanner {
+
+  int64 id = 1; //pk(id)
+  string title = 2; //제목
+  string file_save_name = 3; //file save name
+  string file_dir = 4; //file dir
+  bool is_display = 5; //노출 여부
+
+  int64 register_id = 6; //관리자 항번
+
+  int64 start_at = 7; //시작일
+  int64 end_at = 8; //종료일
+  int64 created_at = 9; //생성일
+  int64 updated_at = 10; //수정일
+  int64 deleted_at = 11; //삭제일
+  string doc = 12; //doc 에 저장된 항목
+  string description = 13; //설명
+
+  string image_url = 101; //image_url 경로
+
+  Link link = 201;
+}
+
+message CurrentCategory {
+  int64 level = 1;
+  int64 id = 2;
+  string text = 3;
+  string short_wording = 4;
+}

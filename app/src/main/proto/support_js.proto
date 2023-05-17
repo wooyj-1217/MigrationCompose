@@ -1,0 +1,165 @@
+package support_js;
+
+import "common.proto";
+
+message StaticCode {
+  required string code = 1;
+  required string name = 2;
+  optional string parent_code = 6;
+  optional string doc = 7;
+}
+
+message Link {
+  required int64 id = 1;
+  required string ref_type = 2;
+  required int64 ref_id = 3;
+  required string type = 4;
+  required string value = 5;
+}
+
+message CsIn {
+  optional int64 id = 1;
+  required string static_code = 2;  // static_code.code
+  optional string created_at = 3;
+  optional string updated_at = 4;
+  optional int32 register_id = 5;
+  optional string state = 6;
+  optional string body = 7;
+  optional string name = 8;
+  optional string contact = 9;
+  optional string email = 10; // 비회원인 경우 이메일 필요
+  optional string company_name = 11;  // 제휴/입점 문의에서만 사용
+  optional string brand_name = 12;    // 제휴/입점 문의에서만 사용
+  optional string doc = 16; // 기타 json 다큐먼트  
+
+  optional common.AppMeta app_meta = 101; 
+
+  repeated CsInAttach attaches = 201;
+  optional CsOut cs_out = 202;
+}
+
+message CsInAttach {
+  optional int64 id = 1;
+  optional int64 cs_in_id = 2;
+  required string path = 3;
+}
+
+message CsOut {
+  optional int64 id = 1;
+  required int64 cs_in_id = 2;
+  optional int32 admin_account_id = 3;
+  optional string created_at = 4;
+  optional string updated_at = 5;
+  optional string body = 6;
+  optional string doc = 7;
+
+  repeated CsOutAttach attaches = 201;
+}
+
+message CsOutAttach {
+  optional int64 id = 1;
+  optional int64 cs_out_id = 2;
+  required string path = 3;
+}
+
+message CsProduct {
+  optional int64 id = 1;
+  required string static_code = 2;  // static_code.code { CSP_01: 제품등록요청, CSP_02: 제품수정요청, CSP_03: 성분등록요청 } 
+  optional int64 register_id = 3;
+  optional int64 product_id = 4;  // 제품수정, 성분등록의 경우에는 있어야 함!!
+  optional string created_at = 5;
+  optional string updated_at = 6;
+  optional string state = 7;
+  optional string body = 8;
+  optional string brand_name = 9; // 제품등록요청시 필요
+  optional string product_name = 10; // 제품등록요청시 필요
+  optional int64 admin_account_id = 11;
+}
+
+message CsProductAttach {
+  optional int64 id = 1;
+  optional int64 cs_product_id = 2;
+  required string path = 3;
+}
+
+message PostCsReq {
+  required CsIn cs_in = 1;
+}
+
+message GetAppRes {
+  required int64 ts = 1;
+  required string image_host = 2;
+  repeated StaticCode static_codes = 3;
+  map<string, string> link_type = 4;
+}
+
+message GetPrivateCsRes {
+  repeated CsIn cs_ins = 1;
+}
+
+message GetPrivateCsShowRes {
+  required CsIn cs_in = 1;
+}
+
+message PostPrivateCsProductReq {
+  required CsProduct cs_product = 1;
+  repeated CsProductAttach cs_product_attaches = 2;
+}
+
+message GetSystemAppRes {
+  message AppMessage {
+    required int32 idMessage = 1;
+    required string messageText = 2;
+    optional string iosVersion = 3;
+    optional string androidVersion = 4;
+    required string messageType = 5;
+    required string osSelect = 6;
+    required string messageState = 7;
+    optional string updateType = 8;
+    optional int32 is_message = 9;
+  }
+
+  message Popup {
+    required int32 idPopup = 1;
+    required bool isLink = 2;
+    required string image = 5;
+
+    optional Link link = 201;
+  }
+
+  required AppMessage app_message = 1;
+  required int64 review_count = 2;
+  map<string, string> splash = 3;
+  repeated Popup popups = 4;
+}
+
+message GetPublicSearchRes {
+  repeated FlatCategory categories = 1;
+  repeated common.Brand brands = 2;
+  repeated common.Product products = 3;
+
+  message FlatCategory {
+    required int32 idFirstCategory = 1;
+    required string firstCategoryText = 2;
+    required int32 idSecondCategory = 3;
+    required string secondCategoryText = 4;
+    optional int32 idThirdCategory = 5;
+    optional string thirdCategoryText = 6;
+  }
+}
+
+message GetPublicSearchMetaCategoryBrandRes {
+  repeated FlatCategory categories = 1;
+  repeated common.Brand brands = 2;
+
+  message FlatCategory {
+    required int32 idFirstCategory = 1;
+    required string firstCategoryText = 2;
+    required int32 idSecondCategory = 3;
+    required string secondCategoryText = 4;
+  }
+}
+
+message GetPublicSearchMetaProductRes {
+  repeated common.Product products = 1;
+}

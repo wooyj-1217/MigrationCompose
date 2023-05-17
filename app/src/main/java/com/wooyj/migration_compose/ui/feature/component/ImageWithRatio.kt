@@ -31,14 +31,7 @@ fun PreviewImageWithRatio() {
     GlowpickTheme {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("16:9")
-            ImageWithRatio(Modifier, RoundedCornerShape(12.dp), 16f / 9f, glowViolet) {
-                Badge(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    backgroundColor = tertiaryLight,
-                    badgeText = "AD",
-                    textColor = Color.White
-                )
-            }
+            ImageWithRatio(Modifier, RoundedCornerShape(12.dp), 16f / 9f, glowViolet)
             Text("4:3")
             ImageWithRatio(Modifier, RoundedCornerShape(12.dp), 4f / 3f, glowRed) {}
             Text("메인 배너")

@@ -1,0 +1,265 @@
+syntax = "proto3";
+package api_k;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+
+
+message ReviewFilter {
+
+  google.protobuf.StringValue review_type = 1; // recommend : 추천, realtime : 실시간 , myreview : 마이리뷰, detail : 상세 페이지 리뷰리스트(카테고리,브랜드,스토어), target_userid : 특정 유저의 리뷰리스트, search : 리뷰 검색용
+  google.protobuf.StringValue sort = 2; //like_asc,like_desc,create_date_asc,create_date_desc,positive_desc(target_userid일때),negative_asc(target_userid일때)
+  google.protobuf.StringValue gender = 3; //요청 [7,6 둘중에 하나] 여자(7,f / 남자(6,m)
+  repeated string age_group = 4; //10s,20early,20late,30early,30late,40over
+  repeated int32 skin_group = 5; //요청 [실데이터 8,9,10,11,12] 건성(8,dry) / 지성(9,oily) / 중성(10,normal) / 복합성(11,mix) / 민감성(12,sensitive)
+  repeated int64 rating_group = 6; //1, 2, 3, 4, 5
+  google.protobuf.Int64Value level = 7; // 카테고리 레벨 (1,2,3)
+  repeated int64 category_ids = 8; // 카테고리 아이디
+  repeated int64 id_keyword_group = 9; //키워드 항번
+  repeated int64 id_brand_category_group = 10; //브랜드 -> 실제로는 브랜드카테고리 항번
+  repeated int64 id_brand_type_group = 11;//판매처
+
+  google.protobuf.Int64Value min_price = 12; //최소값
+  google.protobuf.Int64Value max_price = 13; //최대값
+
+  google.protobuf.Int64Value id_register = 14; // 유저항번
+  google.protobuf.Int64Value id_brand_category = 15; // 브랜드 카테고리
+  google.protobuf.Int64Value id_brand = 16; // 브랜드항번
+  google.protobuf.Int64Value id_product = 17; // 상품항번
+  google.protobuf.StringValue search_word = 18; // 검색어 (상품상세 리뷰 리스트에 검색조건으로 쓰일때)
+
+  google.protobuf.StringValue next_token = 19; // response 에서 다음 페이징에 필터 암호화
+
+  common.Paging paging = 20;
+
+  google.protobuf.Int64Value current_id_register = 21; // 현재 로그인되어 있는 유저항번 (백단에서 header jwt token까서 셋팅함)
+  google.protobuf.BoolValue is_debug = 22; // 디버깅 유무
+
+  google.protobuf.StringValue detail_order = 23;//요청 ["positive_desc"/"negative_asc"] 최신순(default,create_date_desc,create_date_asc), 긍정리뷰순(최신순):"positive_desc", 부정리뷰순(내림차순):"negative_asc", 좋아요(내림차순):"like_desc", 좋아요(오름차순):"like_asc"
+  google.protobuf.StringValue detail_type = 24; // collection (컬렉션), theme(테마), product(제품), new(신제품)
+  google.protobuf.StringValue collection_code = 25; //컬렉션코드
+  google.protobuf.Int64Value id_product_theme = 26; //테마항번
+  google.protobuf.Int64Value id_brand_type = 27; //스토어항번
+  google.protobuf.StringValue release_date = 28; //신제품 제품 리뷰 yyyymmdd
+
+  google.protobuf.StringValue state = 29; //리뷰 노출 타입 N:정상,B:블라인드,C:검수중 (해당건은 리뷰어에서 리뷰 볼때만 호출 일단)
+
+  google.protobuf.Int64Value id_collection = 30; //컬렉션항번
+
+  google.protobuf.Int32Value month_term = 31; // 3,6 (3:3개월, 6:6개월)
+
+  int32 isEventAd = 32; // 이벤트 광고 여부. 0:전체(default), 1:true, 2:false
+
+  repeated string tags = 33; //keywords 말고 tags로 변경
+
+  google.protobuf.StringValue os = 101; //클라이언트 os
+  google.protobuf.StringValue app_version = 102; //클라이언트 앱 버전
+
+
+}
+
+message ReviewRes {
+
+  google.protobuf.StringValue next_token = 1; // response 에서 다음 페이징에 필터 암호화
+  google.protobuf.Int32Value review_total = 2; // 리뷰 총수
+  google.protobuf.Int32Value like_total = 3; // 좋아요 수
+  google.protobuf.StringValue db = 4; // db -> mysql
+  google.protobuf.BoolValue has_next = 5; // 다음 페이징 유무 true/false
+
+  repeated common.Review reviews = 6; // 리뷰
+
+  common.Paging paging = 7;
+
+  google.protobuf.Int32Value review_blind_total = 8; // 블라인드 리뷰 총수 (검수중,블라인드)
+
+}
+
+message NextToken {
+
+  google.protobuf.Int64Value review_id = 1; // 다음페이징 리뷰항번
+  google.protobuf.Int64Value cursor = 2; // 커서용
+
+}
+
+//추천 tab
+message RecommendTabRes {
+
+  repeated RecommendTabLifeItems recommend_life_items = 1; // (카테고리/브랜드)
+
+  repeated common.Review reviews = 2; // 리뷰
+
+  repeated common.Review realtime_reviews = 3; // 실시간리뷰
+
+  google.protobuf.Int64Value review_count = 4; //내가 평가한 제품수
+
+}
+
+
+//앱바 > 리뷰 > 추천 tab : 리뷰로 찾는 인생템 -> (카테고리/브랜드)
+message RecommendTabLifeItems {
+
+  google.protobuf.Int64Value id_brand = 1;
+  google.protobuf.Int64Value category2_id = 2; //2차 카테고리 id
+  google.protobuf.StringValue name = 3; //이름 브랜드/카테고리명
+
+
+}
+
+
+//리뷰 등록
+message ReviewReq {
+
+  google.protobuf.StringValue contents = 1; // 내용
+  google.protobuf.Int32Value rating = 2; // 평점
+  google.protobuf.Int64Value id_product = 3; // 상품항번
+  google.protobuf.Int64Value id_reviewcomment = 4; //리뷰항번
+
+  google.protobuf.StringValue client_ip = 5; //클라이언트 ip
+  google.protobuf.StringValue title = 6; //한줄평
+
+  google.protobuf.Int64Value stamp_id = 7; //출석 이벤트 id
+  google.protobuf.StringValue stamp_register_type = 8; //출석 유형(대체 고정)
+  google.protobuf.Int64Value stamp_register_stamped_at = 9; //출석 년월일(대체 출석 년월일)
+
+}
+
+
+//좋아요,팔로우 토글용
+message ToggleRes {
+
+  google.protobuf.BoolValue like_result_flag = 1; //false 좋아요 안한경우 , true 이미 좋아요 한경우
+  google.protobuf.BoolValue follow_result_flag = 2; //false 팔로우 안한경우 , true 이미 팔로우 한경우
+  google.protobuf.Int64Value review_like_count = 3; //해당 리뷰의 좋아요 수
+  google.protobuf.BoolValue report_result_flag = 4; //false 신고 안한경우, true 이미 신고한 경우
+  google.protobuf.BoolValue block_result_flag = 5; //false 차단 안한경우, true 이미 차단한 경우
+
+}
+
+message NudgeRes {
+
+  google.protobuf.Int64Value review_write_cnt = 1; //리뷰 작성요구수
+  google.protobuf.Int64Value on_going_event_cnt = 2; //진행중인 N개 이벤트 수
+  google.protobuf.StringValue nudge_type = 3; //review_zero : 리뷰0개일때 , review_one : 리뷰1개 이상일경우, review_last_7dayz : 마지막 리뷰후 7일이 경과후
+  google.protobuf.StringValue nudge_check_flag = 4; // 기획서 해당 리뷰 0,1,라스트일때 선택지 번호
+
+  common.Register register = 5;
+  common.CategoryGrade category_grade = 6;
+  common.BrandGrade brand_grade = 7;
+
+  google.protobuf.StringValue current_review_grade = 8; //현재 로그인한 유저 리뷰 등급
+  google.protobuf.StringValue next_review_grade = 9; //다음 단계 유저 리뷰 등급
+
+}
+
+
+//리뷰 신고하기
+message ReviewReportReq {
+
+  //report_type 코드값으로 요청
+  //RR001 : 제품과 무관한 내용, RR002 : 같은 내용 반복 또는 무의미, RR003 : 홍보 및 외부 대가성 리뷰, RR004 : 제품, 브랜드 단순 의견 및 질문
+  //RR005 : 욕설, 저격 등 불쾌감 유발, RR006 : 연락처 등 개인정보 노출, RR007 : 기타
+  google.protobuf.StringValue report_type = 1; // RR001,RR002,RR003,RR004,RR005,RR006,RR007
+
+  //contents
+  google.protobuf.StringValue contents = 2;
+
+  //client-ip -> server에서 셋팅
+  google.protobuf.StringValue ip_address = 3;
+
+}
+
+//리뷰 체크
+message ReviewCheckRes {
+
+  google.protobuf.Int64Value id_reviewcomment = 1; //리뷰항번
+
+  bool is_evaluation_review_write = 2; //평가단 리뷰 작성 유무
+
+}
+
+//팔로워 필터
+message FollowFilter {
+
+  google.protobuf.StringValue nick_name = 1; // 닉네임 검색용
+  google.protobuf.StringValue sort = 2; //create_date_asc,create_date_desc,review_count_asc,review_count_desc
+
+  common.Paging paging = 3;
+
+  google.protobuf.BoolValue is_debug = 4; // 디버깅 유무
+
+  google.protobuf.StringValue next_token = 5; // response 에서 다음 페이징에 필터 암호화
+
+  google.protobuf.Int64Value id_register = 6; //상대방용 프로필 없으면 자기꺼
+
+}
+
+//팔로워
+message FollowRes {
+
+  google.protobuf.StringValue next_token = 1; // response 에서 다음 페이징에 필터 암호화
+  google.protobuf.Int32Value follow_total = 2; // 팔로워 총수
+  google.protobuf.Int32Value following_total = 3; // 팔로잉 총수
+  google.protobuf.BoolValue has_next = 4; // 다음 페이징 유무 true/false
+
+  repeated common.Register registers = 5; // 리뷰
+  RecommendFollowRes recommend_follows = 6; //추천 팔로워
+
+}
+
+//추천 팔로워
+message RecommendFollowRes {
+
+  repeated common.Register register = 1; // 추천 팔로워
+
+}
+
+//팔로워/팔로잉 정보
+message FollowTotalInfoRes {
+
+  google.protobuf.Int32Value follow_total = 1; // 팔로워 총수
+  google.protobuf.Int32Value following_total = 2; // 팔로잉 총수
+  common.Register register = 3; //토큰에 있는 항번에 유저 정보
+
+}
+
+
+//유저 신고하기
+message RegisterReportReq {
+
+  //report_type 코드값으로 요청
+  //RR001 : 제품과 무관한 내용, RR002 : 같은 내용 반복 또는 무의미, RR003 : 홍보 및 외부 대가성 리뷰, RR004 : 제품, 브랜드 단순 의견 및 질문
+  //RR005 : 욕설, 저격 등 불쾌감 유발, RR006 : 연락처 등 개인정보 노출, RR007 : 기타
+  google.protobuf.StringValue report_type = 1; // RR001,RR002,RR003,RR004,RR005,RR006,RR007
+
+  //contents
+  google.protobuf.StringValue contents = 2;
+
+}
+
+//유저 차단 내역 필터 {
+message RegisterBlockFilter {
+
+  google.protobuf.StringValue sort = 1; //create_date_asc,create_date_desc,review_count_asc,review_count_desc
+
+  common.Paging paging = 2;
+
+  google.protobuf.BoolValue is_debug = 3; // 디버깅 유무
+
+  google.protobuf.StringValue next_token = 4;
+
+  google.protobuf.BoolValue is_all = 5; // 전체유무(페이징없이)
+
+}
+
+//유저 차단 내역
+message RegisterBlockRes {
+
+  google.protobuf.StringValue next_token = 1; // response 에서 다음 페이징에 필터 암호화
+  google.protobuf.Int32Value block_total = 2; // 차단내역 총수
+  google.protobuf.BoolValue has_next = 3; // 다음 페이징 유무 true/false
+
+  repeated common.Register registers = 4; // 차단한 유저정보
+
+
+
+}

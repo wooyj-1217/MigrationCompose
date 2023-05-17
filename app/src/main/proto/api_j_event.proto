@@ -1,0 +1,287 @@
+syntax = "proto3";
+package api_j_event;
+
+import "common.proto";
+import "google/protobuf/wrappers.proto";
+
+//이벤트 리스트 조회 Res
+message EventListRes {
+  repeated common.Event event_list = 1; //이벤트 리스트
+  common.NextCursor next_cursor = 2; //페이징처리(다음 페이지 cursor)
+}
+
+//이벤트 상세 조회 Res
+message EventRes {
+  common.Event event = 1; //이벤트 공통 데이터
+  EventRequired event_required = 2; //이벤트 참여 형태, 조건에 따른 데이터(진행중인 이벤트 && 로그인 유저 && 응모 안한 이벤트일 경우에만 셋팅)
+  repeated common.Product product_list = 3; //이벤트에 속한 제품 정보(deprecated)
+  repeated common.EventProduct event_product_list = 4; //이벤트에 속한 제품 정보 - 당첨된 제품만 세팅
+  repeated common.EventProduct event_all_product_list = 5; //이벤트에 속한 제품 정보 - 모든 제품 세팅
+}
+
+//해당 회원의 이벤트 참여 형태, 조건에 따른 개인화 데이터
+message EventRequired {
+  int64 my_review_count = 1; //본인이 작성 한 리뷰 수(리뷰형)
+  bool is_my_reply = 2; //댓글 작성 여부(댓글참여형)
+  bool is_reviewer_grade = 3; //브랜드 or 카테고리 등급 충족 여부(리뷰어등급형)
+  bool is_register_join_range = 4; //회원가입일 충족 여부(회원가입형)
+}
+
+//이벤트 댓글 리스트 조회 Res
+message EventReplyListRes {
+  repeated EventReply event_reply_list = 1; //이벤트 댓글 리스트
+  common.NextId next_id = 2; //페이징처리(다음 페이지 첫번째 id)
+}
+
+//이벤트 댓글
+message EventReply {
+  common.Register register = 1; //댓글을 작성한 회원 정보
+  common.EventReply event_reply = 2; //이벤트 댓글 정보
+}
+
+//이벤트 신청 조건 조회 Res
+message EventQuestionRes {
+  common.Register register = 1;
+  common.EventQuestion event_question = 2; //(Deprecated 2023.02.13)
+  repeated common.EventQuestion event_question_list = 3;
+}
+
+//이벤트 당첨자 안내 리스트 조회
+message EventWinnerListRes {
+  repeated common.Event event = 1; //당첨자가 발표된 이벤트 리스트
+  common.NextCursor next_cursor = 2; //페이징처리(다음 페이지 cursor)
+}
+
+//이벤트 당첨자 안내 개별 조회 Res
+message EventWinnerRes {
+  common.Event event_winner_info = 1; //이벤트 정보
+  repeated EventWinner event_winner_list = 2; //당첨자 리스트
+
+  //상품별 이벤트 당첨자 리스트, 이벤트에 걸려있는 상품이 없을경우 그냥 회원 리스트만 출력
+  message EventWinner {
+    int64 id_product = 1; //제품 항번(제품이 없다면 null)
+    string product_title = 2; //제품 명(제품이 없다면 null)
+    int64 winner_count = 3; //해당 제품 or 이벤트에 대한 당첨자 수
+    repeated common.Register winner_register_list = 4; //당첨자 리스트
+  }
+}
+
+//이벤트 업데이트 라벨 표시 Res
+message EventUpdateRes {
+  common.UpdateLabel event_ongoing = 1; //참여가능 이벤트
+  common.UpdateLabel event_prize = 2; //참여완료 이벤트
+  common.UpdateLabel event_winner = 3; //당첨자발표 이벤트
+}
+
+//당첨된 이벤트 중 리뷰 미작성 제품 정보 Res
+message EventReviewNotWriteListRes {
+  repeated EventReviewNotWrite review_not_write_list = 1;
+
+  message EventReviewNotWrite { //당첨된 이벤트 중 리뷰 미작성 제품
+    common.Product product = 1; //제품항번, 제품명, 제품이미지, 브랜드명 포함
+  }
+}
+
+//이벤트 관련 필터 Req
+message EventFilterReq {
+  google.protobuf.StringValue on_going = 1; //제거 예정: 사용하는 부분 없음
+
+  //이벤트 리스트 조회 관련
+  google.protobuf.Int32Value event_type = 2; //value -> 1:글픽존, 2:평가단, 4:샘플링, 5:설문단, null:전체
+  google.protobuf.Int32Value event_tab = 3; //value -> 1:진행중인 이벤트 탭(당첨된 이벤트를 제외한 모든 이벤트), 2:당첨된 이벤트 탭(당첨된 이벤트만)
+  DetailPage detail_page = 4; //이벤트 상세 페이지 관련 필터, 해당사항 없으면 null 가능
+
+  //이벤트 댓글 관련
+  google.protobuf.StringValue event_reply = 5; //댓글 작성/수정 시 댓글 본문
+
+  google.protobuf.Int32Value answer_type = 6; //1: GENERAL_EVENT, 2: IMAGE_UPLOAD_EVENT, (Deprecated 2023.02.13)
+  repeated EventApplyAnswer answer_list = 7; //이벤트 응모 관련 데이터 첨부, (Deprecated 2023.02.13)
+
+  //이벤트 리스트 조회 관련
+  google.protobuf.StringValue event_menu = 8; //value -> main_event:홈>추천>이벤트, ongoing_event:이벤트탭>참여가능, prize_event:이벤트탭>참여완료, end_event:이벤트탭>종료
+
+  common.Paging paging = 13; //페이징 처리
+
+  repeated EventQuestionAnswer event_question_answer = 14; //이벤트 응모 관련 데이터
+
+  message EventQuestionAnswer {
+    google.protobuf.Int64Value event_question_id = 1; //이벤트 신청조건 항번
+    google.protobuf.Int32Value answer_type = 2; //1: GENERAL_EVENT, 2: IMAGE_UPLOAD_EVENT
+    repeated EventApplyAnswer answer_list = 3; //이벤트 응모 관련 데이터 첨부
+  }
+
+  //이벤트 상세 페이지 관련 필터
+  message DetailPage{
+    google.protobuf.StringValue page_type = 1; //value -> category, brand, store, new_product, collection, theme
+
+    //아래는 detail_page_type 값에 따라 동적으로 셋팅
+    google.protobuf.Int64Value id_first_category = 2; //detail_page_type -> category 일 경우만 값 셋팅
+    google.protobuf.Int64Value id_second_category = 3; //detail_page_type -> category 일 경우만 값 셋팅
+    google.protobuf.Int64Value id_brand = 4; //detail_page_type -> brand 일 경우만 값 셋팅
+    google.protobuf.Int64Value store_id = 5; //detail_page_type -> store 일 경우만 값 셋팅
+    google.protobuf.StringValue product_collection_code = 6; //detail_page_type -> collection 일 경우 code, id 둘 중 한개 셋팅 해야합니다
+    google.protobuf.Int64Value  product_theme_id = 7; //detail_page_type -> theme 일 경우만 값 셋팅
+    google.protobuf.Int64Value product_collection_id = 8; //detail_page_type -> collection 일 경우 code, id 둘 중 한개 셋팅 해야합니다
+  }
+
+  //이벤트 응모 관련 필터
+  message EventApplyAnswer{
+    google.protobuf.StringValue answer = 1; //이벤트 응모 형태: 텍스트 작성 형
+    google.protobuf.StringValue file_org_name = 2; //이벤트 응모 형태: 파일 첨부 형
+    google.protobuf.StringValue file_save_name = 3; //이벤트 응모 형태: 파일 첨부 형
+    google.protobuf.StringValue file_dir = 4; //이벤트 응모 형태: 파일 첨부 형
+    google.protobuf.Int64Value file_size = 5; //이벤트 응모 형태: 파일 첨부 형
+  }
+}
+
+// 출석체크 이벤트 정상 출석 등륵
+message PostStamRegisterReq {
+  int64 stamp_id = 1; //출석체크 이벤트 id
+  string stamp_register_type = 2; //출석체크 유형(정상 고정)
+  int64 stamp_register_stamped_at = 3; //출석 년월일(대체 출석 년월일)
+}
+
+// 최신의 출석체크 이벤트 관련 정보 일체를 요청
+message GetStampStatusReq {
+  common.Paging paging = 1; //페이징 처리
+}
+
+// 출석체크 이벤트 존재 여부 반환
+message GetStampExistRes {
+  bool is_exist = 1; //출석체크 이벤트 존재 여부
+}
+
+// 최신의 출석체크 이벤트 관련 정보 일체를 반환
+message GetStampStatusRes {
+  GetStampRes stamp = 1; //출석체크 이벤트 정보 메인
+  GetStampProgressRes stamp_progress = 2; //출석체크 이벤트 진도율 정보
+  repeated GetStampConditionRes stamp_conditions = 3; //출석체크 이벤트 당첨 조건 정보
+  repeated GetStampRegisterRes stamp_registers = 4; //출석체크 이벤트 출석 정보
+  repeated common.Product stamp_products = 5; //출석체크 이벤트 관련 상품 정보
+  repeated GetStampCommentRes stamp_comments = 6; //출석체크 이벤트 댓글 정보
+  int64 count_stamp_comments = 7; //출석체크 이벤트 등록 댓글 카운트
+  bool is_agree = 8; //출석체크 이벤트 참여 동의 여부
+}
+
+// 출석체크 이벤트 관련 댓글 목록을 요청
+message GetStampCommentsReq {
+  common.Paging paging = 1; //페이징 처리
+}
+
+message GetStampCommentsRes {
+  repeated GetStampCommentRes stamp_comments = 1; //출석체크 이벤트 댓글 정보
+  int64 count_stamp_comments = 2; //출석체크 이벤트 등록 댓글 카운트
+}
+
+// 출석체크 이벤트 메인 정보
+message GetStampRes {
+  int64 id = 1; //출석체크 이벤트 id
+  string type = 2; //보상 유형(경품, 티켓)
+  string title = 3; //제목
+  string sub_title = 4; //설명
+  string content = 5; //내용
+  int64 start_on = 6; //시작 년월일시
+  int64 finish_on = 7; //종료 년월일시
+  int64 reward_on = 8; //당첨 발표 년월일
+  string calendar_on = 9; //캘린더 표시 기준년월
+  string comment_placeholder = 10; //댓글 작성란의 placeholder 텍스트
+  common.Stamp.StampDoc doc = 11; //이미지, 컬러 정보들
+}
+
+// 출석체크 이벤트 진도율 표시를 위한 데이터 반환
+message GetStampProgressRes {
+  repeated int64 stamp_condition_days = 1; //달성 조건 기준일 배열
+  int64 sum_stamp_for_normal = 2; //정상 출석 합계
+  int64 sum_stamp_for_alternative = 3; //대체 출석 합계
+  string comment = 4; //달성 진도율 코멘트
+  string buttonText = 5; //메인 페이지의 달성현황 부분의 버튼 텍스트
+  bool buttonEnable = 6; //메인 페이지의 달성현황 부분의 버튼 활성 여부
+}
+
+// 출석체크 이벤트 당첨 조건 데이터 반환
+message GetStampConditionRes {
+  string title = 1; //딩첨 조건 제목
+  int64 sum_stamp = 2; //누적 출석 횟수
+  int64 sum_winner = 3; //당첨 인원
+}
+
+// 출섹체크 이벤트 출석 데이터 반환
+message GetStampRegisterRes {
+  string type = 1; //출석체크 유형(정상 또는 대체)
+  int64 stamped_at = 2; //츨석체크 년월일시
+  int64 id = 3; //출석체크 이벤트 출석 id
+}
+
+// 출석체크 이벤트 댓글 등록을 위한 요청 데이터
+message PostStampCommentReq {
+  string content = 1; //댓글 내용
+}
+
+// 츨석체크 이벤트 댓글 리스트 반환
+message GetStampCommentListRes {
+  common.NextCursor next_cursor = 1; //페이징 처리(다음 페이지 cursor)
+  repeated GetStampCommentRes stamp_comment = 2; //댓글
+}
+
+// 출석체크 이벤트 댓글 데이터 반환
+message GetStampCommentRes {
+  int64 id = 1; //댓글 id
+  string content = 2; //내용
+  bool isDisplay = 3; //노출여부
+  int64 created_at = 4; //작성일
+
+  common.Register register = 5; //댓글 등록자 정보
+}
+
+// 대체출석 미션을 위한 스크린 팝업용 데이터 반환
+message GetStampMissionAlternativeRes {
+  int64 stamp_id = 1; //출석 이벤트 id
+  string stamp_register_type = 2; //출석 유형(대체 고정)
+  int64 stamp_register_stamped_at = 3; //출석 년월일(대체 출석 년월일)
+  int64 max_review_for_alternative = 4; //대체 출석을 위한 최대 리뷰작성 가능 수
+  int64 sum_review_for_alternative = 5; //대체 출석을 위한 리뷰작성 합계
+  int64 limit_review_for_alternative = 6; //현 시점 기준 대체 출석을 위한 리뷰작성 가능 수
+}
+
+// 출석체크 이벤트 당첨자 상세 정보 반환
+message GetStampWinnersRes {
+  Stamp stamp = 1; //이벤트 정보
+  repeated common.Product stamp_products = 2; //관련 상품 정보
+  repeated GetStampWinnerListByConditionRes stamp_winners = 3; //당첨자 리스트
+
+  message Stamp {
+    string title = 1; //출석체크 이벤트 타이틀
+    string sub_title = 2; //출석체크 이벤트 서브 타이틀
+    string type = 3; //출석체크 이벤트 경품 제공 유형
+    int64 select_on = 4; //출석체크 이벤트 당첨 선정일
+    string message = 5; //출석체크 이벤트 당첨 메시지
+  }
+}
+
+// 출석체크 이벤트 당첨자 목록 정보 반환
+message GetStampWinnerListByConditionRes {
+  string stamp_condition_title = 1; //당첨 조건명(개근상, 참가상, 아차상...)
+  int64 winner_count = 2; //당첨자 수
+  repeated string winner_nicknames = 3; //당첨자 닉네임 배열
+}
+
+//이벤트&출석체크 당첨자 발표 리스트 조회 Req
+message EventStampWinnerListReq {
+  string type = 1; //all, glpick, evaluation, sample, survey, stamp
+  common.Paging paging = 2; //페이징 처리(cursor)
+}
+
+//이벤트&출석체크 당첨자 발표 리스트 조회 Res
+message EventStampWinnerListRes {
+  repeated EventStampWinner event_stamp_winner_list = 1;
+  common.NextCursor next_cursor = 2; //페이징처리(다음 페이지 cursor)
+
+  message EventStampWinner {
+    int64 ref_id = 1; //event.id, stamp.id
+    string ref_type = 2; //event, stamp
+    string type = 3; //all, glpick, evaluation, sample, survey, stamp
+    string title = 4; //제목
+    string client = 5; //진행하는 클라이언트
+    int64 winner_issued_at = 6; //당첨자발표일
+  }
+}

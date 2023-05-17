@@ -1,0 +1,154 @@
+package auth_js;
+
+import "common.proto";
+
+message FcmToken {
+  optional int32 id = 1;
+  optional string created_at = 2;
+  optional string updated_at = 3;
+  required string device_uuid = 4;
+  required string fcm_token = 5;
+  optional int32 register_id = 6;
+  optional bool is_push = 7;
+  optional bool is_user_push = 8;
+  required string os = 9;
+  required string os_version = 10;
+  required string app_version = 11;
+  required string device_model = 12;
+  optional string ip = 13;
+  optional string adid = 14;
+  optional bool is_qna_like_push = 15;
+  optional bool is_qna_reply_push = 16;
+
+  optional string legacy_push_token = 101;
+}
+
+message SNS {
+  optional bool is_disconnectable = 1;
+  optional bool is_apple = 2;
+  optional bool is_facebook = 3;
+  optional bool is_google = 4;
+  optional bool is_kakao = 5;
+  optional bool is_naver = 6;
+}
+
+message PostAuthTokenLoginReq {
+  optional string email = 1;
+  optional string password = 2;
+  optional string provider = 3;
+  optional string uid = 4;
+  optional string device_uuid = 5;
+  optional bool activating = 6;  // 휴면회원 풀 때 true
+  optional string ios_code = 7; // 애플용 refresh_token에 필요한 코드값
+}
+
+message PostAuthTokenLoginRes {
+  required string access_token = 1;
+  required string refresh_token = 2;
+
+  required common.Register register = 201;
+}
+
+message PostAuthTokenRefreshReq {
+  required string refresh_token = 1;
+}
+
+message PostAuthTokenRefreshRes {
+  required string access_token = 1;
+  required string refresh_token = 2;
+}
+
+message PostAuthTokenReq {
+  required string device_uuid = 1;
+}
+
+message PostAuthTokenRes {
+  required string access_token = 1;
+  required string refresh_token = 2;
+}
+
+message GetAuthDeviceRes {
+  required FcmToken fcm_token = 201;
+}
+
+message GetAuthVerifyEmailRes {
+  optional bool is_retired = 1;
+  optional bool is_inactivated = 2;
+  optional bool is_existed = 3;
+  optional bool is_only_social = 4;
+  optional bool is_invalid = 5;
+  optional bool is_apple = 6;
+  optional bool is_facebook = 7;
+  optional bool is_google = 8;
+  optional bool is_kakao = 9;
+  optional bool is_naver = 10;
+}
+
+message PostAuthSignupReq {
+  required string email = 1;
+  required string password = 2;
+  required string nickname = 3;
+  optional string image_path = 4; // AWS s3 presign 업로드시 사용하는 key(path) 문자열(/ 로 시작하지 않음)
+}
+
+message PostAuthSignupRes {
+  required int32 idRegister = 1;
+  optional bool is_on_toss_event = 101;
+  optional bool has_toss_balance = 102;
+}
+
+message PostAuthSignupSnsReq {
+  required string provider = 1;
+  required string uid = 2;
+  optional int32 gender = 3;
+  optional int32 birthYear = 4;
+  optional string userTel = 5;
+  optional string image_url = 6;
+}
+
+message PostAuthSignupSnsRes {
+  required int32 idRegister = 1;
+  optional bool is_on_toss_event = 101;
+  optional bool has_toss_balance = 102;
+}
+
+message PutRegisterNicknameReq {
+  required string nickName = 1;
+}
+
+message PutRegisterContactReq {
+  required common.Register register = 201;
+  optional string certified_code = 202;
+}
+
+message PutRegisterPasswordReq {
+  required string password = 1; // 기존 비밀번호
+  required string new_password = 2; // 변경할 신규 비밀번호
+}
+
+message PutRegisterProfileReq {
+  required int32 gender = 1;  // 6: 남자, 7: 여자
+  required int32 birth_year = 2;
+  required int32 skin_type = 3; // 8: 건성, 9: 지성, 10: 중성, 11: 복합성, 12: 민감성
+
+  /**
+   * if (image_changed == true) {
+   *   image_path not null: 변경
+   *   image_path null: 삭제  
+   * }
+   **/
+  optional string image_path = 4; // AWS s3 presign 업로드시 사용하는 key(path) 문자열(/ 로 시작하지 않음), 삭제시는 null
+  optional bool image_changed = 5;  // 이미지가 변경, 삭제 되는 경우에 true
+  optional string nickname = 6;
+}
+
+message GetSnsRes {
+  required SNS sns = 201;
+}
+
+message PostSnsReq {
+  required string provider = 1;
+  required string uid = 2;
+  optional string extra_data = 3;  // 부가정보에 대한 json 문자열
+  optional string ios_code = 4; // 애플용 refresh_token에 필요한 코드값
+}

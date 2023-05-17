@@ -1,0 +1,204 @@
+syntax = "proto3";
+package qna_j;
+
+import "common.proto";
+import "google/protobuf/wrappers.proto";
+
+//Q&A 답변/댓글 Req
+message QnaReplyReq {
+
+  common.Paging paging = 1; //페이징 처리
+  google.protobuf.Int64Value parent_id = 2; //답변 항번(댓글 등록 시)
+  string text = 3; //답변, 댓글 본문
+  string order = 4; //답변, 댓글 정렬(id_asc, id_desc)
+  bool is_total_count = 5; //res total count 값 세팅 여부
+
+  repeated int64 product_ids = 6;//제품 항번
+}
+
+//Q&A 답변 리스트 조회 Res
+message QnaReplyListRes {
+
+  common.NextCursor next_cursor = 1; //페이징처리(다음 페이지 cursor)
+  repeated common.QnaReply qna_reply_list = 2; //Q/A 답변 리스트
+  google.protobuf.Int64Value total_count = 3; //total count
+}
+
+//Q&A 댓글 리스트 조회 Res
+message QnaReplyCommentListRes {
+
+  common.NextCursor next_cursor = 1; //페이징처리(다음 페이지 cursor)
+  repeated common.QnaReply qna_reply_comment_list = 2; //Q/A 댓글 리스트
+  google.protobuf.Int64Value total_count = 3; //total count
+}
+
+//Q&A 답변/댓글 조회 Res
+message QnaReplyRes {
+
+  common.QnaReply qna_reply = 1; //Q/A 답변/댓글
+}
+
+//Q&A 답변/댓글 등록 Res
+message QnaReplyInsertRes {
+
+  common.QnaReply qna_reply = 1; //Q/A 답변/댓글
+}
+
+
+//Q&A 답변/댓글 좋아요
+message QnaReplyLikeRes {
+
+  bool is_like = 1; //좋아요 여부(개인화)
+  int64 like_count = 2; //좋아요 수
+  int64 id = 3;
+}
+
+message QnaReq {
+
+  string title = 1;
+  string text = 2;
+
+
+  repeated string tags = 5;
+  repeated int64 product_ids = 6;
+  repeated common.QnaImage qna_images = 7;//이미지 저장
+  int64 register_id = 8;//qna 글 작성자 항번
+
+
+  repeated common.QnaCategory qna_categories = 10;//현재는 1개 입력하지만 나중에 확장될 수도 있어서
+  repeated common.QnaBrand qna_brands = 11;//태그에 해당
+}
+
+message QnaDetailRes {
+
+  common.Qna qna = 1;
+  repeated common.Product products = 3;
+  repeated common.SearchTag tags = 4;
+
+}
+
+
+
+//Q&A 질문, 답변, 댓글, 작성자 신고 Req
+message QnaReportReq {
+
+  bool is_register_report = 1; //true : 작성자, false: 질문/답변/댓글 신고
+  string ref_type = 2; //신고대상 테이블(qna, qna_reply, register)
+  int64 ref_id = 3; //신고대상 테이블 항번(qna.id, qna_reply.id, register.idRegister)
+  string code = 4; //신고사유 코드(static_code.code)
+  string text = 5; //신고내용
+}
+
+//Q&A 질문, 답변, 댓글, 작성자 신고 Res
+message QnaReportRes {
+
+  bool is_reported = 1; //신고 여부
+}
+
+//Q&A 작성자 1:1 차단 Res
+message QnaBlockRes {
+
+  bool is_blocked = 1; //차단 여부
+}
+
+message QnaListReq {
+
+  common.Paging paging = 1;
+  string type = 2;//interest(관심) , realTime(실시간) , hot(인기) , my(내 관심)
+  string order = 3;//default(전체), reply_count_asc(답면 많은), interest_count_asc(궁금해요 많은)
+
+  repeated common.CategoryGroup categories = 5;// [type:interest, cursor 1이상부터 요청값에 필요함]
+}
+
+message QnaListRes {
+
+  repeated common.Qna qnas = 2;
+
+  common.NextCursor next_cursor = 3;
+
+  repeated common.CategoryGroup categories = 7;
+
+  google.protobuf.BoolValue contain_category_group = 9;//   메인 페이지> 상단 탭 메뉴 > Q&A 리스트 페이지 > 관심분야(2개) 노출 유무
+
+}
+
+/*
+ * Q&A 리스트 조회 Req(개편: 2023.03.14)
+ */
+message QnaListV4Req {
+
+  common.Paging paging = 1;
+  string type = 2;//realTime(실시간), my(MY)
+  Category category = 3; //카테고리 필터
+
+  message Category {
+    int64 id_first_category = 1;
+    repeated int64 id_second_category = 2;
+  }
+}
+
+/*
+ * Q&A 리스트 조회 Res(개편: 2023.03.14)
+ */
+message QnaListV4Res {
+
+  repeated common.Qna qnas = 1;
+  common.NextCursor next_cursor = 2;
+}
+
+message QnaInterestRes {
+
+  google.protobuf.BoolValue is_interest = 1;
+  int64 interest_count = 2;
+
+}
+
+//Q&A 회원 상태
+message QnaRegisterStateRes {
+
+  string state = 1; //회원 상태
+  google.protobuf.Int64Value started_at = 2; //회원 정지/차단 시작일
+  google.protobuf.Int64Value expired_at = 3; //회원 정지/차단 만료일
+}
+
+message MyLatestQnaRes {
+
+  common.QnaLog my_latest_qna = 1;
+
+}
+
+/*
+ * Q&A 카테고리 조회 Res
+ */
+message QnaMonthlyCategoryRes {
+
+  MonthlyCategory monthly_category = 1;
+
+  message MonthlyCategory {
+    Date date = 1;
+    repeated FirstCategory first_category_list = 2;
+
+    message Date {
+      string createdAt = 1;
+      Range range = 2;
+
+      message Range {
+        string startAt = 1;
+        string endAt = 2;
+      }
+    }
+
+    message FirstCategory {
+      int64 first_category_id = 1;
+      string first_category_text = 2;
+      string first_category_qna_count = 3;
+      repeated SecondCategory second_category_list = 4;
+
+      message SecondCategory {
+        int64 second_category_id = 1;
+        string second_category_text = 2;
+        string second_category_qna_count = 3;
+      }
+    }
+  }
+}

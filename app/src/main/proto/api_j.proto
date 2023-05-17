@@ -1,0 +1,911 @@
+syntax = "proto3";
+package api_j;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+import "api_j_event.proto";
+
+message ProductReviewRes {
+  string nextToken = 1;
+  bool hasNext = 2;
+  int64 reviewTotal = 3;
+  int64 likeTotal = 4;
+  repeated common.Review reviews = 5;
+
+  common.Scoreboard scoreboard = 6;
+}
+
+message NewProductsMainRes {
+  repeated common.Product products = 11;
+}
+
+// 삭제 예정
+message NewProductsRes {
+
+  repeated common.Product ad_products = 10;
+
+  repeated common.Product products = 11;
+
+  repeated common.MonthlyProduct banner = 12;
+  common.NextOffset next_offset = 13;
+
+  common.EventAdInfo event_ad_info = 14; //이벤트광고정보
+}
+
+//홈 메인 tab -> banner_list_response
+message CommonBannerListRes {
+  repeated common.CommonBanner common_banner_list = 1;
+}
+
+//홈 추천 카테고리랭킹 Response
+message WeeklyRankingRes {
+  repeated RankingProductsRes categories = 1;
+  string rank_update_date = 2;
+}
+
+//홈 메인 주간 뷰티랭킹 > 카테고리 정보
+message CategoryProducts {
+
+  google.protobuf.Int64Value second_category_id = 1; //2차 카테고리 id
+  google.protobuf.Int64Value third_category_id = 2; //3차 카테고리 id
+  string category_name = 3; //카테고리명
+
+  repeated common.Product products = 4; //카테고리 관련된 상품정보들
+
+}
+
+message RankingProductsRes {
+  int64 total_count = 1;
+  int64 second_category_id = 2;
+  int64 third_category_id = 3;
+  string category_name = 4;
+  string rank_update_date = 5;
+
+  repeated common.Product products = 11;
+  common.NextOffset next_offset = 12;
+  repeated common.Product recommendProducts = 13;
+}
+
+message CategoryInfo {
+
+  repeated FirstCategory first_categories = 11;
+
+  message FirstCategory {
+    int64 first_category_id = 1;
+    string first_category_name = 2;
+    string first_category_image = 3;
+    google.protobuf.BoolValue first_is_new = 4;
+    repeated SecondCategory second_categories = 11;
+  }
+
+  message SecondCategory {
+    int64 second_category_id = 1;
+    string second_category_name = 2;
+    google.protobuf.BoolValue second_is_new = 3;
+    google.protobuf.BoolValue show_merged_children = 4;
+    repeated string second_alias_keyword = 5;
+    repeated ThirdCategory third_categories = 11;
+  }
+
+  message ThirdCategory {
+    int64 third_category_id = 1;
+    string third_category_name = 2;
+    google.protobuf.BoolValue third_is_new = 3;
+    repeated string third_alias_keyword = 4;
+  }
+}
+
+message BrandRankingRes {
+  int64 total_count = 1;
+  BrandInfo brandInfo = 2;
+  string rank_update_date = 3;
+  repeated common.Product products = 11;
+  common.NextOffset next_offset = 12;
+  common.Brand brand = 13;
+  repeated common.Product recommendProducts = 14;
+
+  message BrandInfo {
+    string brandTitle = 1;
+    string brandImg = 2;
+    string facebook = 3;
+    string kakaotalk = 4;
+    string youtube = 5;
+    string twitter = 6;
+    string brandUrl = 7;
+    double bannerRatio = 8;
+    CategoryInfo category_info = 9;
+    string country = 10;
+
+    common.BrandBanner banner = 11;
+
+    string sub_name = 12;
+  }
+}
+
+//현재는 brandTitle, brandImg 만 사용
+//확장성을 위해 나머지 것들은 살려둠.
+message BrandInfoRes {
+
+  string brandTitle = 1;
+  string brandImg = 2;
+  string facebook = 3;
+  string kakaotalk = 4;
+  string youtube = 5;
+  string twitter = 6;
+  string brandUrl = 7;
+  double bannerRatio = 8;
+  CategoryInfo category_info = 9;
+  string country = 10;
+  common.BrandBanner banner = 11;
+  bool isDisplay = 12;
+}
+
+// 관심 브랜드 삽입,삭제 요청
+message InterestBrandReq {
+  int64 brand_id = 1;
+}
+
+message InterestBrandFilterReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+}
+
+// 관심 브랜드 응답 (내꺼)
+message InterestBrandRes {
+  repeated common.BrandLike brand_likes = 1;
+  int64 total_count = 2;
+  common.NextOffset next_offset = 11;
+}
+
+message TotalBrandFilterReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+  string initial = 3;
+}
+
+// 브랜드 전체 응답 (관심설정 페이지)
+message TotalBrandRes {
+  repeated common.Brand brands = 1;
+  common.NextOffset next_offset = 11;
+}
+
+// 관심 카테고리 요청
+message InterestCategoryFilterReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+}
+
+// 관심 카테고리 응답(자기가 선택한 것)
+message InterestCategoryRes {
+  repeated common.CategoryLike category_likes = 1;
+  int64 total_count = 2;
+  common.NextOffset next_offset = 11;
+}
+
+//관심 카테고리 삽입,삭제 req
+message InterestCategoryReq {
+  int64 category_id = 1;
+}
+
+message TotalCategoryRes {
+  repeated common.FirstCategoryV2 first_categories = 1;
+}
+
+//오늘의 테마 (메인)
+message TodayThemeMainRes {
+  repeated common.ProductTheme product_themes = 1;
+}
+
+//추천검색어
+message RecommendKeywordRes {
+  string placeholder = 1;
+  repeated string keywords = 2;
+}
+
+//컬렉션 관련 Req
+message ProductCollectionFilterReq{
+  google.protobuf.Int64Value id = 1; //컬렉션 항번 값
+  google.protobuf.StringValue code = 2; //컬렉션 고유 코드 값(unique)
+  google.protobuf.BoolValue is_home = 3; //true: 메인(3건), false: 컬렉션 리스트(20건)
+  google.protobuf.Int64Value id_first_category = 4; //검색 필터 조건: 1차 카테고리 항번
+
+  common.Paging paging = 5; //페이징처리(cursor)
+}
+
+//컬렉션 리스트 Res
+message ProductCollectionListRes{
+  repeated common.ProductCollection product_collection_list = 1; //컬렉션 리스트
+  common.NextCursor next_cursor = 2; //다음 페이지 cursor
+}
+
+//컬렉션 상세페이지 -> 컬렉션 랭킹 리스트 Res
+message ProductCollectionRankingRes{
+  repeated common.ProductCollectionMap product_list = 1; //해당 컬렉션에 속해있는 제품 리스트
+  common.NextCursor next_cursor = 2; //다음 페이지 cursor
+  repeated google.protobuf.StringValue tag_list = 3; //태그 리스트
+  google.protobuf.StringValue title = 4; //컬렉션 타이틀
+}
+
+//메인(홈) -> 내부용 중간배너
+message HomeMiddleBannerRes {
+  common.CommonBanner banner = 1;
+}
+
+//고객지원(Notice, FAQ) Req
+message HelpFilterReq{
+  google.protobuf.StringValue static_code = 1;
+  common.Paging paging = 2;
+}
+
+//고객지원 > 공지사항 리스트 Res
+message NoticeListRes{
+  repeated common.Notices notice_list = 1;
+  common.NextCursor next_cursor = 2;
+}
+
+//고객지원 > 공지사항 상세 Res
+message NoticeRes{
+  common.Notices notice = 1;
+}
+
+//고객지원 > FAQ 리스트 Res
+message FaqListRes{
+  repeated common.Faq faq_list = 1;
+  common.NextCursor next_cursor = 2;
+}
+
+//고객지원 > FAQ 상세 Res
+message FaqRes{
+  common.Faq faq = 1;
+}
+
+//고객지원 > FAQ 분류 리스트 Res
+message FaqCategoryRes {
+  repeated common.StaticCode faq_code_list = 1;
+}
+
+message Reviewers {
+
+  google.protobuf.Int32Value my_grade = 1;
+  repeated ReviewerInfo reviewer = 2;
+  common.NextOffset next_offset = 3;
+
+  message ReviewerInfo {
+    int32 review_cnt = 1;
+    double rating_avg = 2;
+    google.protobuf.BoolValue is_follow = 3;
+    common.Register register = 11;
+  }
+}
+
+message MyPageFilterReq {
+  google.protobuf.Int64Value offset = 1;
+}
+
+message MyPageRes {
+  common.Register register = 1;
+  common.Notices notice = 2;
+
+  InterestBrandRes interest_brands = 3;
+  InterestCategoryRes interest_categories = 4;
+  common.Review review = 5;
+}
+
+message MonthProductRankingFilterReq {
+  int32 level = 1;
+  repeated int64 category_ids = 2;
+}
+
+message RankingFilterRes {
+  repeated common.Keyword keywords = 1;
+  repeated common.BrandCategory brand_categories = 2;
+  repeated common.BrandType brand_type = 3;
+  google.protobuf.Int32Value min_price = 4;
+  int32 avg_price = 5;
+  int32 max_price = 6;
+  repeated int32 price_sections = 7;
+  repeated string tags = 8;
+}
+
+//스토어/브랜드/카테고리 이름 내려주는 프로터버퍼
+message CommonNavNameReq {
+
+  google.protobuf.StringValue type = 1; //category, brand, store
+  google.protobuf.Int64Value category_level = 2; //카테고리 레벨  // 2, 3
+  google.protobuf.Int64Value category_id = 3; //카테고리 항번
+  google.protobuf.Int64Value store_id = 4; //스토어 항번
+  google.protobuf.Int64Value brand_id = 5; //브랜드 항번
+  google.protobuf.StringValue collection_code = 6; //컬렉션 코드
+  google.protobuf.Int64Value theme_id = 7; //테마 아이디
+  google.protobuf.Int64Value cast_id = 8; //캐스트 아이디
+  google.protobuf.Int64Value collection_id = 9; //컬렉션 아이디
+}
+
+//스토어/브랜드/카테고리 이름 내려주는 프로터버퍼
+message CommonNavNameRes {
+
+  string name = 1; //이름
+  google.protobuf.BoolValue is_like = 2; //관심유무
+  google.protobuf.Int64Value last_cast_id = 3; //캐스트 마지막 항번 (탐색 상세용)
+  api_j_event.EventUpdateRes last_event_update_info = 4; //이벤트 관련 정보
+
+}
+
+message CategoryRankingReq {
+  repeated int64 ids = 1;
+  repeated int64 keyword_ids = 2;
+  repeated int64 brandType_ids = 3; // 판매처
+  repeated int64 brandCategory_ids = 4; // 브랜드 카테고리
+  int32 min_price = 5;
+  int32 max_price = 6;
+  string order = 7; // rating_desc : 평점순, reviewCount_desc : 리뷰개수순, default : (기본)랭킹순
+  common.Paging paging = 8;
+  repeated string tags = 9;
+  int32 release_date = 10;
+
+  google.protobuf.Int32Value skinType = 11; // 8,9,10,11,12 (건성:8, 지성:9, 중성:10, 복합성:11, 민감성:12)
+  google.protobuf.StringValue age = 12; // 10s,20early,20late,30early,30late,40over
+  google.protobuf.Int32Value gender = 13; // 6,7 (남자:6, 여자:7)
+  google.protobuf.Int32Value month_term = 14; // 3,6 (3:3개월, 6:6개월)
+
+  int32 isEventAd = 15;  // 광고 여부. 0:전체(default), 1:true, 2:false
+}
+
+message CategoryRankingRecommendRes {
+
+  google.protobuf.Int32Value skinType = 1;
+  google.protobuf.Int32Value gender = 2;
+  google.protobuf.StringValue age = 3;
+  repeated common.Product recommend1 = 4;
+  repeated common.Product recommend2 = 5;
+  repeated common.Product recommend3 = 6;
+
+}
+
+message ReviewerReq {
+  int32 level = 1;
+  int64 id = 2;
+  int32 grade = 3;
+  int64 offset = 4;
+  int64 limit = 5;
+}
+
+message BrandRankingReq {
+  int32 level = 1;
+  repeated int64 category_ids = 2;
+  repeated int64 brandType_ids = 3; // 판매처
+  int32 min_price = 4;
+  int32 max_price = 5;
+  string order = 6; // rating_desc : 평점순, reviewCount_desc : 리뷰개수순, default : (기본)랭킹순
+  common.Paging paging = 8;
+  int32 release_date = 9;
+
+  google.protobuf.Int32Value skinType = 11; // 8,9,10,11,12 (건성:8, 지성:9, 중성:10, 복합성:11, 민감성:12)
+  google.protobuf.StringValue age = 12; // 10s,20early,20late,30early,30late,40over
+  google.protobuf.Int32Value gender = 13; // 6,7 (남자:6, 여자:7)
+  google.protobuf.Int32Value month_term = 14; // 3,6 (3:3개월, 6:6개월)
+
+  int32 isEventAd = 15;  // 광고 여부. 0:전체(default), 1:true, 2:false
+}
+
+message BrandRankingListRes {
+  repeated BrandRankingRes brandRanking = 1;
+}
+
+message StoreRankingReq {
+  int32 level = 1;
+  repeated int64 category_ids = 2;
+  repeated int64 brandCategory_ids = 3; // 브랜드
+  int32 min_price = 4;
+  int32 max_price = 5;
+  string order = 6; // rating_desc : 평점순, reviewCount_desc : 리뷰개수순, default : (기본)랭킹순
+  common.Paging paging = 8;
+  int32 release_date = 9;
+
+  google.protobuf.Int32Value skinType = 11; // 8,9,10,11,12 (건성:8, 지성:9, 중성:10, 복합성:11, 민감성:12)
+  google.protobuf.StringValue age = 12; // 10s,20early,20late,30early,30late,40over
+  google.protobuf.Int32Value gender = 13; // 6,7 (남자:6, 여자:7)
+  google.protobuf.Int32Value month_term = 14; // 3,6 (3:3개월, 6:6개월)
+
+  int32 isEventAd = 15;  // 광고 여부. 0:전체(default), 1:true, 2:false
+}
+
+message StoreRankingRes {
+  int64 total_count = 1;
+  string rank_update_date = 2;
+  repeated common.Product products = 11;
+  common.NextOffset next_offset = 12;
+  common.BrandType store = 13;
+  common.BrandTypeBanner banner = 14;
+  repeated common.Product recommendProducts = 15;
+}
+
+message StoreRankingListRes {
+  repeated StoreRankingRes storeRanking = 1;
+}
+
+
+message SearchReq {
+
+  google.protobuf.StringValue query = 1; //제품검색어
+
+  common.Paging paging = 2; //페이징용 limit,offset으로 요청
+
+  google.protobuf.StringValue order = 3; // score_desc : (기본)랭킹순, ration_count_desc : 리뷰많은순, rating_desc : 평점높은순, price_desc : 가격 높은순, price_asc : 가격 낮은순
+
+}
+
+message SearchRes {
+
+  repeated SearchCategoryInfoRes categories = 1;
+  repeated common.Brand brands = 2;
+  repeated common.Product products = 3;
+  google.protobuf.StringValue placeholder = 4;
+  repeated string keywords = 5;
+
+  common.NextOffset next_offset = 6;
+
+}
+
+//리뷰 작성 추천리스트
+message SearchReviewRecommendRes {
+
+  repeated SearchReviewRecommendIdAndNames items = 1;
+
+  common.Register register = 2;
+
+  repeated common.Product recommend_products = 3;
+
+}
+
+message SearchReviewRecommendIdAndNames {
+
+  google.protobuf.Int64Value id_brand = 1;
+  google.protobuf.Int64Value category2_id = 2; //2차 카테고리 id
+  google.protobuf.StringValue name = 3; //이름 브랜드/카테고리명
+
+  repeated common.Product products = 4; //브랜드,2차카테고리에 해당하는 제품목
+
+}
+
+message SearchCategoryInfoRes {
+
+  int64 id_first_category = 1;
+  string first_category_text = 2;
+
+  int64 id_second_category = 3;
+  string second_category_text = 4;
+
+  google.protobuf.Int64Value id_third_category = 5;
+  google.protobuf.StringValue third_category_text = 6;
+
+}
+
+message AwardListRes {
+  repeated common.HitProducts awards = 1;
+  string current_top_banner_url = 2;
+}
+
+message BrandAppbarSearchRes {
+  repeated RecommendBrand recommend_brands = 1;
+  repeated common.BrandCategory brand_categories = 2;
+
+  message RecommendBrand {
+    common.Brand brand = 1;
+    repeated common.BrandBanner banners = 2;
+  }
+}
+
+message BrandAppbarSearchInitialReq {
+  int64 brand_category_id = 1;
+  string initial = 2; //브랜드 초성 검색 초성(영어, 한글모음, 숫자)
+  common.Paging paging = 3;
+}
+
+message BrandAppbarSearchInitialRes {
+  repeated common.Brand search_brands = 1;
+  common.NextOffset next_offset= 2;
+}
+
+message ThemeDetailReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+}
+
+message ThemeDetailRes {
+  repeated common.ProductThemeMap products = 1;
+  repeated google.protobuf.StringValue tag_list = 2; //태그 리스트
+  google.protobuf.StringValue title = 3; //테마 타이틀
+  common.NextOffset next_offset = 11;
+  google.protobuf.BoolValue is_display = 12;
+}
+
+/*
+ * 뱃지카운트 개수
+ */
+message BadgeCountRes {
+  int32 badge_count = 1;
+}
+
+message AwardDetailV2Res {
+  common.HitProducts hit_product = 1;
+}
+
+//제품 상세 상단 Req
+message ProductDetailTopReq {
+  int64 event_ad_id = 1; //이벤트 광고 항번
+}
+
+//제품 상세 상단 Res
+message ProductDetailTopRes {
+  common.Product product_info = 1; //제품정보
+  ProductRanking ranking_info = 2; //랭킹정보
+  Ingredient ingredient_info = 3; //성분정보
+  ProductReviewGraph review_graph_info = 4; //리뷰그래프정보
+  common.MonthlyProduct monthly_product = 5; //광고 > 신제품 배너
+  common.EventAdInfo event_ad_info = 6; //광고 > 이벤트광고정보
+  common.LineBanner line_banner = 7; //광고 > 띠 배너
+}
+
+//제품 상세 상단(제품 랭킹 정보)
+message ProductRanking {
+  ProductCategoryRanking category_ranking = 1; //카테고리 랭킹 리스트
+  ProductRanker brand_ranking = 2; //브랜드 랭킹
+  repeated common.HitCategory award_info = 3; //old award
+
+  //제품 카테고리 랭킹
+  message ProductCategoryRanking {
+    ProductRanker second_category_ranking = 1; //2차 카테고리 랭킹
+    ProductRanker third_category_ranking = 2; //3차 카테고리 랭킹
+  }
+
+  //제품 랭킹 양식
+  message ProductRanker {
+    int64 id = 1;
+    string name = 2;
+    int64 rank = 3;
+    int64 total = 4;
+    int64 idProduct = 5;
+    int64 date = 6;
+  }
+}
+
+//제품상세 상단(리뷰 그래프 정보)
+message ProductReviewGraph {
+  int64 review_total = 1; //총 리뷰 수
+  int64 positive_total = 2; //긍정 리뷰 수
+  int64 negative_total = 3; //부정 리슈 수
+  int64 blind_total = 4; //블라인드 처리 된 리뷰 수
+  double rating_avg = 5; //리뷰 평점
+  Rating rating = 6; //각 항목 별 리뷰 수
+
+  message Rating {
+    int64 rating1 = 1; //1점 리뷰 수
+    int64 rating2 = 2; //2점 리뷰 수
+    int64 rating3 = 3; //3점 리뷰 수
+    int64 rating4 = 4; //4점 리뷰 수
+    int64 rating5 = 5; //5점 리뷰 수
+  }
+}
+
+//제품상세 상단(성분 정보)
+message Ingredient {
+  repeated common.GlowpickFactor factor_list = 1; //제품 성분 리스트
+}
+
+// 신제품 상세페이지 > 랭킹 tab : 신제품 월별 랭킹 에서 사용
+message MonthlyProductReq {
+  common.Paging paging = 1;
+}
+// 신제품 상세페이지 > 랭킹 tab : 신제품 월별 랭킹 에서 사용
+message MonthlyRankProductsRes {
+  repeated common.MonthlyProducts monthly_products = 1;
+}
+
+message GloryDNAAllReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+  google.protobuf.Int32Value type = 3; // 1(카테고리등급) default, 2(브랜드 등급)
+}
+
+message GloryDNAAllRes {
+  repeated GloryDNARow dna_list = 1;
+  common.NextOffset next_offset = 2;
+}
+
+message GloryDNARow {
+  common.CategoryGroup category_info = 1;
+  int32 grade = 2;
+  int32 review_count = 3;
+  common.Brand brand = 4;
+}
+
+message MessageBoxListReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+}
+
+message MessageBoxListRes {
+  int32 total = 1;
+  repeated common.MessageBox message_box_list = 2;
+  common.NextOffset next_offset = 3;
+}
+
+message NickNameRes {
+  common.Register register = 1;
+}
+
+message InterestProductListReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+
+  int32 level = 3;//1차 2차 3차 카테고리
+  repeated int64 category_ids = 4;//카테고리 아이디값 (1차,2차 ->1개, 3차 -> N개)
+  int32 sort = 5;//0 -> 관심등록순, 1 -> 리뷰 많은 순
+}
+
+
+message InterestProductListRes {
+  repeated common.Product products = 1;
+  common.NextOffset next_offset = 2;
+  int64 total_count = 3;
+}
+
+//신제품 랭킹 값페이지 요청값
+message MonthNewProductsRankingReq {
+  int32 level = 1;//1차 2차 3차 카테고리
+  repeated int64 category_ids = 2;//카테고리 아이디값 (1차,2차 ->1개, 3차 -> N개)
+  repeated int64 keyword_ids = 3;//키워드
+  repeated int64 brandType_ids = 4; // 판매처
+  repeated int64 brandCategory_ids = 5; // 브랜드 카테고리
+  int32 min_price = 6;
+  int32 max_price = 7;
+  string order = 8; // rating_desc : 평점순, reviewCount_desc : 리뷰개수순, default : (기본)랭킹순
+  common.Paging paging = 9;
+
+  int32 release_date = 10;
+
+  google.protobuf.Int32Value skinType = 11; // 8,9,10,11,12 (건성:8, 지성:9, 중성:10, 복합성:11, 민감성:12)
+  google.protobuf.StringValue age = 12; // 10s,20early,20late,30early,30late,40over
+  google.protobuf.Int32Value gender = 13; // 6,7 (남자:6, 여자:7)
+  google.protobuf.Int32Value month_term = 14; // 3,6 (3:3개월, 6:6개월)
+
+  repeated string tags = 15;
+  int32 isEventAd = 16;  // 광고 여부. 0:전체(default), 1:true, 2:false
+}
+
+//신제품 랭킹 페이지 응답
+message MonthNewProductsRankingRes {
+  int64 total_count = 1;
+  string rank_update_date = 2;
+  repeated common.Product products = 11;
+  common.NextOffset next_offset = 12;
+  repeated common.MonthlyProduct banner = 13;
+  repeated common.Product recommendProducts = 14;
+}
+
+message AwardVersionRes {
+  string award_version = 1;//v1,v2
+}
+
+//카테고리 추천제품 v2
+message CategoryRecommendProductsRes {
+  repeated RecommendSet recommends = 1;
+
+  message RecommendSet {
+    string title = 1;
+    repeated common.Product products = 2;
+  }
+}
+
+//회원검색 Req filter
+message SearchRegisterFilterReq {
+  google.protobuf.StringValue nick_name = 1; //회원닉네임
+  common.Paging paging = 2; //페이징 처리(cursor)
+}
+
+//회원검색 Res
+message SearchRegisterListRes {
+  repeated common.Register register_list = 1;
+  google.protobuf.Int64Value register_count = 2;
+
+  common.NextCursor next_cursor = 3; //페이징처리(다음 페이지 cursor)
+}
+
+//휴대폰 인증 Req
+message MobileCertificationReq {
+  string phone = 1; //유저 휴대폰번호. 예시) 01012341234
+  string certified_code = 2; //휴대폰 번호로 요청한 6자리 인증코드. 예시) 000000
+}
+
+//휴대폰 인증 Res
+message MobileCertificationRes {
+  common.MobileCertification mobile_certification = 1; //인증 데이터
+}
+
+//신규 카테고리 Res
+message IsNewCategoriesRes {
+  repeated int64 first_categories = 1;
+  repeated int64 second_categories = 2;
+}
+
+//홈 업데이트 뱃지
+message HomeUpdateBadgeRes {
+
+  //컬렉션 마지막 항번
+  int64 last_product_collection_id = 1;
+
+  //어워드 마지막 항번
+  int64 last_award_id = 2;
+
+  //캐스트 마지막 항번
+  int64 last_cast_id = 3;
+
+}
+
+//광고 > 띠 배너
+message LineBannerReq {
+
+  string location = 1; //home, event, product_detail
+}
+
+//광고 > 띠 배너
+message LineBannerRes {
+
+  common.LineBanner line_banner = 1; //띠 배너
+}
+
+//홈 메인 > 모듈 리스트 조회 요청
+message HomeMainModuleListReq {
+  common.Paging paging = 1; //next_seq 요청
+}
+
+//홈 메인 > 모듈 리스트 조회 응답
+message HomeMainModuleListRes {
+  repeated Module module_list= 1;
+  common.NextSeq next_seq = 2; //{플랜hashkey}-{플랜field}-{플랜seq} -> 'home_plan_main-100-10'
+
+  message Module {
+    string type = 1; //101~115번 프로토콜 버퍼 메시지의 이름
+    int64 seq = 2; //해당 플랜 내에서 해당 모듈의 고유값
+
+    //새로운 모듈 형태가 추가 될 경우 같은 패턴으로 작성 하면 됩니다.
+    ModuleCategory module_category = 101; //카테고리 랭킹
+    ModuleNewProductCategory module_new_product_category = 102; //신제품 카테고리 랭킹
+    ModuleCollectionCategory module_collection_category = 103; //컬렉션 카테고리 랭킹
+    ModuleCollection module_collection = 104; //컬렉션 랭킹
+    ModuleNewProduct module_new_product = 105; //신제품
+    ModuleMonthlyProduct module_monthly_product = 106; //월별 신제품 랭킹
+    ModuleRecommendBrand module_recommend_brand = 107; //브랜드 랭킹
+    ModuleNewCast module_new_cast = 108; //신규 캐스트
+    ModuleRecommendProductCategory module_recommend_product_category = 109;
+    ModuleRecommendCast module_recommend_cast = 110; //추천 캐스트 카테고리
+    ModuleRecommendReviewCategory module_recommend_review_category = 111; //추천 리뷰 카테고리
+    ModuleRecommendQnaCategory module_recommend_qna_category = 112; //추천 Q&A 카테고리
+    ModuleEvent module_event = 113; //이벤트
+    ModuleLineBanner module_line_banner = 114; //띠배너(네이티브 DA)
+    ModuleNewAwardProductCategory module_new_award_product_category = 115; //어워드 수상제품 카테고리
+    ModuleNewAward module_new_award = 116; //어워드
+    ModuleRankingCuration module_ranking_curation = 117; //랭킹 큐레이션
+  }
+}
+
+//추천 제품 카테고리 랭킹
+message ModuleRecommendProductCategory {
+  common.CurrentCategory category = 1;
+  repeated common.Product product_list = 2;
+}
+
+//카테고리 랭킹
+message ModuleCategory {
+  common.CurrentCategory category = 1;
+  repeated common.Product product_list = 2;
+  repeated common.Product recommend_products = 3;
+}
+
+//컬렉션 카테고리 랭킹 모듈
+message ModuleCollectionCategory {
+  common.ProductCollection collection = 1;
+  common.CurrentCategory category = 2;
+  repeated common.Product product_list = 3;
+}
+
+//컬렉션 랭킹 모듈
+message ModuleCollection {
+  common.ProductCollection collection = 1;
+  common.CurrentCategory category = 2;
+  repeated common.Product product_list = 3;
+}
+
+//신제품 카테고리 랭킹 모듈
+message ModuleNewProductCategory {
+  common.CurrentCategory category = 1;
+  repeated common.Product product_list = 2;
+}
+
+//신제품 랭킹 모듈
+message ModuleNewProduct {
+  repeated common.Product product_list = 1;
+}
+
+//월별 신제품 랭킹 모듈
+message ModuleMonthlyProduct {
+  repeated common.Product product_list = 1;
+}
+
+//브랜드 랭킹 모듈
+message ModuleRecommendBrand {
+  repeated common.Brand brand_list = 1;
+}
+
+//신규 캐스트 모듈
+message ModuleNewCast {
+  common.Pouch pouch = 1;
+}
+
+//추천 캐스트 카테고리 모듈
+message ModuleRecommendCast {
+  common.CurrentCategory category = 1;
+  common.Pouch pouch = 2;
+}
+
+//추천 리뷰 카테고리 모듈
+message ModuleRecommendReviewCategory {
+  repeated common.Review reviewcomment_list = 1;
+}
+
+//추천 Q&A 카테고리 모듈
+message ModuleRecommendQnaCategory {
+  common.Qna qna = 1;
+}
+
+//이벤트 모듈
+message ModuleEvent {
+  repeated common.Event event_list = 1;
+}
+
+//네이티브 DA 광고 모듈
+message ModuleLineBanner {
+  common.LineBanner line_banner = 1;
+}
+
+//최신 어워드 모듈
+message ModuleNewAward {
+
+  Award award = 1;
+
+  message Award {
+
+    int64 id = 1;
+    repeated AwardFirstCategory award_first_category_list = 2;
+
+    message AwardFirstCategory {
+      string text = 1;
+      string summary = 2;
+      repeated common.Product product_list = 3;
+    }
+  }
+}
+
+//최신 어워드 수상 제품 카테고리 모듈
+message ModuleNewAwardProductCategory {
+
+  AwardWinnerProduct award_winner_product = 1;
+
+  message AwardWinnerProduct {
+    string text = 1;
+    string summary = 2;
+    repeated common.Product product_list = 3;
+  }
+}
+
+//랭킹 큐레이션 모듈
+message ModuleRankingCuration {
+
+  repeated RankingCuration ranking_curation_list = 1;
+
+  message RankingCuration {
+    common.CurrentCategory category = 1;
+    repeated common.Product product_list = 2;
+  }
+}

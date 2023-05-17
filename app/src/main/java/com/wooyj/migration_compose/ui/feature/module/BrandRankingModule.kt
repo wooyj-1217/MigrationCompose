@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wooyj.migration_compose.ui.feature.component.ImageWithRatio
-import com.wooyj.migration_compose.ui.feature.component.ProductListItem
+import com.wooyj.migration_compose.ui.feature.component.ProductItem
 import com.wooyj.migration_compose.ui.theme.GlowpickTheme
 import com.wooyj.migration_compose.ui.theme.bold
 import com.wooyj.migration_compose.ui.theme.glowGreen
@@ -99,26 +99,13 @@ fun BrandRankingItem() {
             style = GlowpickTheme.typography.title3.multiLine().bold()
         )
 
-        ProductListItem(
+        ProductItem(
             brandName = "시울",
             productName = "무드 플러쉬 매트 틴트",
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = greyLight06)
-                .padding(8.dp)
         )
-        Spacer(modifier = Modifier.padding(top = 8.dp))
-        ProductListItem(
-            brandName = "시울",
-            productName = "무드 플러쉬 매트 틴트",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(color = greyLight06)
-                .padding(8.dp)
-        )
-        Spacer(modifier = Modifier.padding(top = 22.dp))
-
     }
 }

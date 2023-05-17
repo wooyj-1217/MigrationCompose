@@ -1,0 +1,10 @@
+syntax = "proto3";
+package tracking_js;
+
+import "common.proto";
+
+message PutSystemMessageTrackingCountReq {
+  int64 noti_id = 1; //푸시 항번
+  string os = 2; //OS: ios, aos
+  string path = 3; //유입 경로: message_push, message_box
+}

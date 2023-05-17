@@ -1,0 +1,92 @@
+syntax = "proto3";
+package noah;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+
+//캐스트 미리보기 조회
+message PouchPreviewRes {
+  string module_list = 1;//캐스트 모듈 본문
+  repeated int64 module_product_list = 2;//캐스트 모듈 본문내 제품항번
+  map<int64, common.Product> module_products_info = 3;//캐스트 모듈 본문내 제품의 상세정보
+  map<string, string> pouchInfo = 4;
+}
+
+//앱 메인 캐스트 조회
+message PouchHomeRes {
+  repeated common.Pouch pouches = 1;
+}
+
+message PouchDetailRes {
+  common.Pouch pouch = 1;
+  repeated common.Product products = 2;
+  repeated common.Pouch recommend_pouches = 3;
+  google.protobuf.BoolValue is_like = 4;
+  google.protobuf.BoolValue is_interest = 5;
+  google.protobuf.BoolValue is_display = 6;
+}
+
+message PouchCommentListRes {
+  repeated common.PouchComment pouch_comments = 1;
+  int64 pouch_comments_count = 2;
+  common.NextOffset next_offset = 11;//사용 안함 (아래 paging 쓰게 되면 삭제할 예정)
+  common.Paging paging = 12;
+}
+
+
+//캐스트 리스트 조회 필터
+message PouchListFilterReq {
+  google.protobuf.Int64Value offset = 1;
+  google.protobuf.Int64Value limit = 2;
+
+  int64 id_pouch_category = 3;
+  int64 id_brand = 4;
+  int64 id_store = 5;
+  int64 id_second_category = 6;
+  bool is_month = 7;//신제품 플래그값
+  int64 id_product_theme = 8;
+  string code = 9;//콜렉션 조회용
+
+  int64 id_register = 10;//위시리스트 조회용
+  int64 id_collection = 11;//콜렉션 조회용(2) - 클라이언트에서 collection_id 혹은 code 넘긴다고 한다. 둘 다 넘어오면 collection_id 를 우선순위로 하자.
+
+  google.protobuf.Int64Value best_id_pouch_category = 13;
+
+}
+
+message PouchCommentListReq {
+  google.protobuf.Int64Value offset = 1;//사용 안함 (아래 paging 쓰게 되면 삭제할 예정)
+  google.protobuf.Int64Value limit = 2;//사용 안함 (아래 paging 쓰게 되면 삭제할 예정)
+  common.Paging paging = 3;
+}
+
+message PouchListRes {
+  repeated common.Pouch pouches = 1;
+  common.NextOffset next_offset = 11;
+}
+
+message PouchCategoryListRes {
+  repeated common.PouchCategory pouch_categories = 1;
+}
+
+message PouchCommentBodyReq {
+  string comment = 1;
+}
+
+//캐스트 리스트 조회 필터
+message PouchRelatedFilterReq {
+  google.protobuf.Int64Value id_brand = 1;
+  google.protobuf.Int64Value id_store = 2;
+  google.protobuf.Int64Value id_second_category = 3;
+  google.protobuf.StringValue releate_year_month = 4;
+
+  google.protobuf.Int64Value offset = 5;
+  google.protobuf.Int64Value limit = 6;
+}
+
+//캐스트 관심 설정했는지 확인하는 response
+message PouchInterestCheckRes {
+  bool is_check = 1;
+}
+
+
