@@ -805,16 +805,16 @@ message ModuleCategory {
 
 //컬렉션 카테고리 랭킹 모듈
 message ModuleCollectionCategory {
-  common.ProductCollection collection = 1;
-  common.CurrentCategory category = 2;
-  repeated common.Product product_list = 3;
+  common.CurrentCategory category = 1;
+  common.ProductCollection collection = 2;
+  repeated common.ProductCollectionMap product_list = 3; //해당 컬렉션에 속해있는 제품 리스트
 }
 
 //컬렉션 랭킹 모듈
 message ModuleCollection {
-  common.ProductCollection collection = 1;
-  common.CurrentCategory category = 2;
-  repeated common.Product product_list = 3;
+  common.CurrentCategory category = 1;
+  common.ProductCollection collection = 2;
+  repeated common.ProductCollectionMap product_list = 3; //해당 컬렉션에 속해있는 제품 리스트
 }
 
 //신제품 카테고리 랭킹 모듈
@@ -835,7 +835,16 @@ message ModuleMonthlyProduct {
 
 //브랜드 랭킹 모듈
 message ModuleRecommendBrand {
-  repeated common.Brand brand_list = 1;
+  repeated RecommendBrand recommend_brand_list = 1;
+
+  //TODO: 추천브랜드 테이블 만들어지면 수정 필요
+  message RecommendBrand {
+    string title = 1;
+    string description = 2;
+    string image_url = 3;
+    common.Brand brand = 4;
+    common.Product product = 5;
+  }
 }
 
 //신규 캐스트 모듈

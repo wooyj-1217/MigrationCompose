@@ -1,34 +1,35 @@
 package com.wooyj.migration_compose.ui.feature.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.wooyj.migration_compose.R
+import com.wooyj.migration_compose.ui.data.ProductData
+import com.wooyj.migration_compose.ui.data.testProductData
 import com.wooyj.migration_compose.ui.feature.component.badge.RankingBadge
 import com.wooyj.migration_compose.ui.theme.GlowpickTheme
 import com.wooyj.migration_compose.ui.theme.bold
-import com.wooyj.migration_compose.ui.theme.glowBlue
 import com.wooyj.migration_compose.ui.theme.glowRed
 import com.wooyj.migration_compose.ui.theme.greyLight06
 import com.wooyj.migration_compose.ui.theme.secondaryLight
@@ -41,12 +42,12 @@ fun PreviewProductListItem() {
     GlowpickTheme {
         Column {
             ProductItem(
-                "시울", "무드 플러쉬 매트 틴트", modifier = Modifier
+                testProductData,
+                modifier = Modifier
                     .fillMaxWidth()
             )
             ProductItem(
-                brandName = "시울",
-                productName = "무드 플러쉬 매트 틴트",
+                testProductData,
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .background(color = greyLight06)
@@ -58,18 +59,26 @@ fun PreviewProductListItem() {
 
 
 @Composable
-fun ProductItem(brandName: String, productName: String, modifier: Modifier = Modifier) {
+fun ProductItem(
+    product: ProductData,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clickable {
+                Log.e("ProductItem", "idProduct >> ${product.idProduct}")
+            }
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        ImageWithRatio(
-            modifier = Modifier.width(64.dp),
-            shape = RoundedCornerShape(8.dp),
-            ratio = 1f / 1f,
-            background = Color.White
+        AsyncImage(
+            model = product.imageUrl,
+            contentDescription = "DA Image",
+            modifier = Modifier
+                .width(64.dp)
+                .height(64.dp)
+                .clip(RoundedCornerShape(12.dp))
         )
         Box(
             modifier = Modifier
@@ -77,9 +86,9 @@ fun ProductItem(brandName: String, productName: String, modifier: Modifier = Mod
                 .align(Alignment.CenterVertically)
         ) {
             Column(modifier = Modifier.padding(start = 16.dp)) {
-                Text(brandName, style = GlowpickTheme.typography.body2.bold())
+                Text(product.brandTitle, style = GlowpickTheme.typography.body2.bold())
                 Text(
-                    productName,
+                    product.productTitle,
                     style = GlowpickTheme.typography.body2,
                     modifier = Modifier.padding(top = 8.dp)
                 )

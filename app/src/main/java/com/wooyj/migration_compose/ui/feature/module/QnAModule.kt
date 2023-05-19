@@ -126,8 +126,7 @@ fun QnAModule() {
             backgroundColor = greyLight06,
             buttonText = "자세히 보기",
             textColor = secondaryLight
-        ) {
-        }
+        )
         Spacer(Modifier.padding(top = 8.dp))
 
     }

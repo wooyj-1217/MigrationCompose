@@ -137,6 +137,7 @@ fun TextStyle.multiLine(): TextStyle = this.copy(
 
 fun buildTextStyle(type: GlowpickTextType): TextStyle =
     TextStyle(
+        fontFamily = pretendardFontFamily,
         fontSize = type.fontSize,
         lineHeight = type.lineHeight,
         platformStyle = PlatformTextStyle(

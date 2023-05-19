@@ -57,8 +57,7 @@ fun AwardModule() {
             buttonText = "2023 상반기 어워드",
             textColor = secondaryLight,
             modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-        }
+        )
     }
 
 

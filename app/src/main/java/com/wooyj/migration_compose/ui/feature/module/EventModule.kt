@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wooyj.migration_compose.ui.data.testProductData
 import com.wooyj.migration_compose.ui.feature.component.ModuleHeader
 import com.wooyj.migration_compose.ui.feature.component.ProductItem
 import com.wooyj.migration_compose.ui.feature.component.SeeMoreButton
@@ -32,16 +33,16 @@ fun EventModule() {
         }
         Spacer(modifier = Modifier.padding(top = 16.dp))
         ProductItem(
-            "시울", "무드 플러쉬 매트 틴트",
-            modifier = Modifier.clickable {  }
+            testProductData,
+            modifier = Modifier.clickable { }
         )
         ProductItem(
-            "시울", "무드 플러쉬 매트 틴트",
-            modifier = Modifier.clickable {  }
+            testProductData,
+            modifier = Modifier.clickable { }
         )
         ProductItem(
-            "시울", "무드 플러쉬 매트 틴트",
-            modifier = Modifier.clickable {  }
+            testProductData,
+            modifier = Modifier.clickable { }
         )
         Spacer(modifier = Modifier.padding(top = 16.dp))
         SeeMoreButton(
@@ -49,8 +50,7 @@ fun EventModule() {
             backgroundColor = greyLight06,
             buttonText = "무료체험 이벤트 모두 보기",
             textColor = secondaryLight
-        ) {
-        }
+        )
     }
 
 }

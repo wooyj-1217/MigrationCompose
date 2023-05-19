@@ -40,9 +40,6 @@ message Brand {
   string image_url = 101;
   google.protobuf.BoolValue is_favorite = 102;//관심 브랜드 플래그 값
   google.protobuf.BoolValue search_location = 103; //name, subName 중 어느 컬럼을 사용하는지 판단하기 위한 값
-  string promotion_image_url = 104;
-
-  repeated Product product_list = 201;
 }
 
 message Product {

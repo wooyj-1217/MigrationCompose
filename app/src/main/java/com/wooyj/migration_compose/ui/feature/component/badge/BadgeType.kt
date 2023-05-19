@@ -55,11 +55,9 @@ sealed class RankingBadge : BadgeType {
                             1 -> {
                                 (12.5).dp
                             }
-
                             2 -> {
                                 (7.5).dp
                             }
-
                             else -> {
                                 9.dp
                             }

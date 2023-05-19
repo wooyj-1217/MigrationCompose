@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wooyj.migration_compose.ui.data.testProductData
 import com.wooyj.migration_compose.ui.feature.component.ImageWithRatio
 import com.wooyj.migration_compose.ui.feature.component.ProductItem
 import com.wooyj.migration_compose.ui.theme.GlowpickTheme
@@ -100,8 +101,7 @@ fun BrandRankingItem() {
         )
 
         ProductItem(
-            brandName = "시울",
-            productName = "무드 플러쉬 매트 틴트",
+            testProductData,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))

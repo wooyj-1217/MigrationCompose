@@ -59,7 +59,7 @@ fun DAModule(banner: common.Common.LineBanner) {
             highLightGlowRed,
             "해당 제품 보기",
             glowRed
-        ) { Toast.makeText(context, "해당 제품 보기", Toast.LENGTH_LONG).show() }
+        )
     }
 }
 

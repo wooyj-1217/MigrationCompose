@@ -37,13 +37,13 @@ fun PreviewSeeMoreButton() {
                 greyLight06,
                 "해당 제품 보기",
                 secondaryLight
-            ) { Log.e("SeeMoreButton", "Click!") }
+            )
             Spacer(modifier = Modifier.padding(top = 8.dp))
             SeeMoreButton(
                 highLightGlowRed,
                 "더 알아보기",
                 glowRed
-            ) { Log.e("SeeMoreButton", "Click!") }
+            )
         }
     }
 }
@@ -51,18 +51,16 @@ fun PreviewSeeMoreButton() {
 
 @Composable
 fun SeeMoreButton(
-    backgroundColor : Color,
+    backgroundColor: Color,
     buttonText: String,
     textColor: Color,
-    modifier : Modifier = Modifier,
-    clickEvent: () -> Unit
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(backgroundColor)
-            .clickable(onClick = clickEvent),
+            .background(backgroundColor),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
